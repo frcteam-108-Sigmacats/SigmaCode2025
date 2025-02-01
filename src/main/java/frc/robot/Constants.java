@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,5 +20,57 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+  }
+  public static class SwerveDriveConstants{
+    public static final int fLDriveMotorID = 1;
+    public static final int fLTurnMotorID = 2;
+    public static final double fLAbsEncoderOffset = -Math.PI / 2;
+
+    public static final int fRDriveMotorID = 3;
+    public static final int fRTurnMotorID = 4;
+    public static final double fRAbsEncoderOffset = 0;
+
+    public static final int bLDriveMotorID = 5;
+    public static final int bLTurnMotorID = 6;
+    public static final double bLAbsEncoderOffset = Math.PI;
+
+    public static final int bRDriveMotorID = 7;
+    public static final int bRTurnMotorID = 8;
+    public static final double bRAbsEncoderOffset = Math.PI / 2;
+
+    public static final int driveMotorCurrentLimit = 50; /*in amps */
+    public static final int turnmotorCurrentLimit = 20; /*in amps */
+
+    public static final double krakenRPM = 6000.0;
+
+    public static final int DriveMotorPinionTeeth = 14;
+
+    public static final double wheelDiameter = Units.inchesToMeters(3);
+
+    public static final double kDrivingMotorReduction = (45.0 * 21) / (DriveMotorPinionTeeth * 15);
+
+    public static final double drivemotorP = 0.04;
+    public static final double drivemotorI = 0.0;
+    public static final double drivemotorD = 0.0;
+
+    public static final double turnmotorP = 1.0;
+    public static final double turnmotorI = 0.0;
+    public static final double turnmotorD = 0.0;
+
+    public static final double turningFactor = 2 * Math.PI;
+
+    public static double trackWidth = Units.inchesToMeters(21.9635);
+    public static double wheelbase = Units.inchesToMeters(21.9635);
+    public static double kMaxSpeedMPS = 12;
+    public final static double maxAngularspeed = 4 * Math.PI;
+    public static boolean gyroReversed = false;
+    public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
+      new Translation2d(wheelbase / 2.0, trackWidth/ 2.0),
+      new Translation2d(wheelbase / 2.0, -trackWidth/ 2.0),
+      new Translation2d(-wheelbase / 2.0, trackWidth/ 2.0),
+      new Translation2d(-wheelbase / 2.0, -trackWidth/ 2.0));
+    
+      public static final double deadband = 0.2;
+      
   }
 }
