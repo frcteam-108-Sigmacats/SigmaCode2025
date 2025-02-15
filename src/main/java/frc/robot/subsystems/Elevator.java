@@ -26,8 +26,8 @@ public class Elevator extends SubsystemBase {
  public SparkMax leftElevatorMotor;
  public SparkMax rightElevatorMotor;
  
- private SparkMaxConfig leftElevatorMotorConfig;
- private SparkMaxConfig rightElevatorMotorConfig;
+ private SparkMaxConfig leftElevatorMotorConfig = new SparkMaxConfig();
+ private SparkMaxConfig rightElevatorMotorConfig = new SparkMaxConfig();
 
  private SparkClosedLoopController elevatorPIDController;
  
@@ -38,33 +38,35 @@ public class Elevator extends SubsystemBase {
    leftElevatorMotor = new SparkMax(Elevatorconstants.leftElevatorMotorID, MotorType.kBrushless);
    rightElevatorMotor = new SparkMax(Elevatorconstants.rightElevatorMotorID, MotorType.kBrushless);
 
-   leftElevatorMotorConfig.idleMode(IdleMode.kBrake);
-   leftElevatorMotorConfig.smartCurrentLimit(Elevatorconstants.ElevatorMotorCurrentlimit);
-
-   leftElevatorMotorConfig.alternateEncoder.countsPerRevolution(8192);
-   leftElevatorMotorConfig.closedLoop.pid(Elevatorconstants.piviotP, Elevatorconstants.piviotI, Elevatorconstants.piviotD);
-   leftElevatorMotorConfig.closedLoop.velocityFF(1/5676);
-   leftElevatorMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
-   
-   leftElevatorMotorConfig.softLimit.forwardSoftLimit(Elevatorconstants.elevatorForwardSoftLimit);
-   leftElevatorMotorConfig.softLimit.reverseSoftLimit(Elevatorconstants.elevatorReverseSoftLimit);
-
    rightElevatorMotorConfig.idleMode(IdleMode.kBrake);
    rightElevatorMotorConfig.smartCurrentLimit(Elevatorconstants.ElevatorMotorCurrentlimit);
 
+   rightElevatorMotorConfig.alternateEncoder.countsPerRevolution(8192);
+   rightElevatorMotorConfig.alternateEncoder.inverted(true);
+   rightElevatorMotorConfig.closedLoop.pid(Elevatorconstants.piviotP, Elevatorconstants.piviotI, Elevatorconstants.piviotD);
+   rightElevatorMotorConfig.closedLoop.velocityFF(1/5676);
+   rightElevatorMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
+   
    rightElevatorMotorConfig.softLimit.forwardSoftLimit(Elevatorconstants.elevatorForwardSoftLimit);
    rightElevatorMotorConfig.softLimit.reverseSoftLimit(Elevatorconstants.elevatorReverseSoftLimit);
 
-   rightElevatorMotorConfig.follow(leftElevatorMotor,  true);
+   leftElevatorMotorConfig.idleMode(IdleMode.kBrake);
+   leftElevatorMotorConfig.smartCurrentLimit(Elevatorconstants.ElevatorMotorCurrentlimit);
 
-   elevatorPIDController = leftElevatorMotor.getClosedLoopController();
+   leftElevatorMotorConfig.softLimit.forwardSoftLimit(Elevatorconstants.elevatorForwardSoftLimit);
+   leftElevatorMotorConfig.softLimit.reverseSoftLimit(Elevatorconstants.elevatorReverseSoftLimit);
+
+   leftElevatorMotorConfig.follow(rightElevatorMotor, true);
+
+   elevatorPIDController = rightElevatorMotor.getClosedLoopController();
 
 
-   elevatorencoder = leftElevatorMotor.getAlternateEncoder();
+   elevatorencoder = rightElevatorMotor.getAlternateEncoder();
 
    leftElevatorMotor.configure(leftElevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
    rightElevatorMotor.configure(rightElevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+   elevatorencoder.setPosition(0);
    
   }
 public void setElevatorPosition(double position){
@@ -73,7 +75,7 @@ public void setElevatorPosition(double position){
  
 }
 public void setElevatorSpeed(double Speed){
-leftElevatorMotor.set(Speed);}
+rightElevatorMotor.set(Speed);}
 
 public double getElevatorPosition(){
   return elevatorencoder.getPosition();

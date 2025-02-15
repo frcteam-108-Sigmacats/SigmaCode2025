@@ -30,15 +30,15 @@ private Trigger upPov, downPov, bA, bY;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-elevatorsubsystem.setDefaultCommand((new SetElevatorPosition(elevatorsubsystem, 0)));
+//elevatorsubsystem.setDefaultCommand((new SetElevatorPosition(elevatorsubsystem, 0)));
 
     // Configure the trigger bindings
     configureBindings();
 
-    upPov.whileTrue(new SetElevatorSpeed(elevatorsubsystem, 0.1));
-    downPov.whileTrue(new SetElevatorSpeed(elevatorsubsystem, -0.1));
-    bY.whileTrue(new SetElevatorPosition(elevatorsubsystem, 0));
-    bA.whileTrue(new SetElevatorPosition(elevatorsubsystem, 0));
+   // upPov.whileTrue(new SetElevatorSpeed(elevatorsubsystem, 0.3));
+   // downPov.whileTrue(new SetElevatorSpeed(elevatorsubsystem, -0.3));
+   bY.whileTrue(new SetElevatorPosition(elevatorsubsystem, 1.0));
+   bA.whileTrue(new SetElevatorPosition(elevatorsubsystem, 0));
   }
 
   /**
