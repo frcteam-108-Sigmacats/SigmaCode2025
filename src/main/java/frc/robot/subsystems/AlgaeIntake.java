@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeIntakeConstants;
@@ -38,16 +39,21 @@ public class AlgaeIntake extends SubsystemBase {
     algaePivotMotorConfig.smartCurrentLimit(AlgaeIntakeConstants.algaePivotMotorCurrentLimit);
 
     algaePivotMotorConfig.absoluteEncoder.positionConversionFactor(360);
+    algaePivotMotorConfig.absoluteEncoder.inverted(true);
 
     algaePivotMotorConfig.closedLoop.pid(AlgaeIntakeConstants.pivotP, AlgaeIntakeConstants.pivotI, AlgaeIntakeConstants.pivotD);
     algaePivotMotorConfig.closedLoop.velocityFF(1/5676);
     algaePivotMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+    algaePivotMotorConfig.closedLoop.positionWrappingEnabled(true);
+    algaePivotMotorConfig.closedLoop.positionWrappingMinInput(0);
+    algaePivotMotorConfig.closedLoop.positionWrappingMaxInput(360);
 
     pivotPIDController = algaePivotMotor.getClosedLoopController();
     pivotAbsEncoder = algaePivotMotor.getAbsoluteEncoder();
 
     alageRollerMotorConfig.idleMode(IdleMode.kCoast);
     alageRollerMotorConfig.smartCurrentLimit(AlgaeIntakeConstants.algaeRollerMotorCurrentLimit);
+    alageRollerMotorConfig.inverted(true);
 
     algaePivotMotor.configure(algaePivotMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeRollerMotor.configure(alageRollerMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -97,6 +103,8 @@ public class AlgaeIntake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("algae Pivot Position", getAlgaePivotPosition());
+    SmartDashboard.putNumber("Get Current: ", algaeRollerMotor.getOutputCurrent());
   }
 
   @Override

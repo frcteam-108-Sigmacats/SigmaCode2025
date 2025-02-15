@@ -4,8 +4,14 @@
 
 package frc.robot;
 
+import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AlgaeIntakeCmds.RestAlgaeIntake;
+import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeIntake;
+import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeOuttake;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotPosition;
+import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotSpeed;
+import frc.robot.commands.AlgaeIntakeCmds.TestAlgaeRoller;
 import frc.robot.subsystems.AlgaeIntake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,16 +31,17 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-      private Trigger bLTrigger, bRTrigger;
+      private Trigger bX, bB;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    algaeSub.setDefaultCommand(new RestAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeRestPivotPosition, AlgaeIntakeConstants.algaeRestSpeed));
     // Configure the trigger bindings
     configureBindings();
 
-    bLTrigger.whileTrue(new TestAlgaePivotPosition(algaeSub, 0));
-    bRTrigger.whileTrue(new TestAlgaePivotPosition(algaeSub, 0));
+    bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
+    bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
   }
 
   /**
@@ -48,8 +55,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-   bLTrigger = m_driverController.leftTrigger();
-   bRTrigger = m_driverController.rightTrigger();
+   bX = m_driverController.x();
+   bB = m_driverController.b();
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
