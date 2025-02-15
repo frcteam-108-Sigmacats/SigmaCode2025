@@ -23,8 +23,8 @@ public class AlgaeIntake extends SubsystemBase {
   private SparkMax algaePivotMotor;
   private SparkMax algaeRollerMotor;
 
-  private SparkMaxConfig algaePivotMotorConfig;
-  private SparkMaxConfig alageRollerMotorConfig;
+  private SparkMaxConfig algaePivotMotorConfig = new SparkMaxConfig();
+  private SparkMaxConfig alageRollerMotorConfig = new SparkMaxConfig();
 
   private SparkClosedLoopController pivotPIDController;
 
@@ -54,6 +54,9 @@ public class AlgaeIntake extends SubsystemBase {
 
 
   }
+  public void SetAlgaeIntakePivotSpeed(double speed){
+    algaePivotMotor.set(speed);
+}
 
   public void setAlgaePivot(double position){
     pivotPIDController.setReference(position, ControlType.kPosition);
