@@ -28,7 +28,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    boolean fieldRelative = false;
+    boolean fieldRelative = true;
     swerveDrive.setDefaultCommand(new Drive(swerveDrive, m_driverController, fieldRelative));
     // Configure the trigger bindings
     configureBindings();

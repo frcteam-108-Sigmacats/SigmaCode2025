@@ -49,15 +49,15 @@ private Translation2d translation;
     double yAxis = -m_driverController.getLeftY();
     double xAxis = -m_driverController.getLeftX();
     double rotAxis = -m_driverController.getRightX();
-
-    yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.6 : yAxis);
-    xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.6 : xAxis);
+// y=0 x=0.0//
+    yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis * 10));
+    xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.0 : (xAxis * 10));
     rotAxis = (Math.abs(rotAxis) < SwerveDriveConstants.deadband ? 0 : (rotAxis * 10));
 
     translation = new Translation2d(yAxis, xAxis).times(SwerveDriveConstants.kMaxSpeedMPS);
     rotation = rotAxis * SwerveDriveConstants.maxAngularspeed;
 
-    swerve.drive(translation, rotAxis, fieldRelative);
+    swerve.drive(translation, rotation, fieldRelative);
   }
 
   // Called once the command ends or is interrupted.

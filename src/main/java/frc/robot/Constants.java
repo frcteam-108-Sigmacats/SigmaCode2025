@@ -48,20 +48,20 @@ public final class Constants {
     public static final double wheelDiameter = Units.inchesToMeters(3);
 
     public static final double kDrivingMotorReduction = (45.0 * 21) / (DriveMotorPinionTeeth * 15);
-
-    public static final double drivemotorP = 0.04;
+// p0.9 i0.0 d0.0//
+    public static final double drivemotorP = 1.5;
     public static final double drivemotorI = 0.0;
     public static final double drivemotorD = 0.0;
-
+// p1 i0 d0//
     public static final double turnmotorP = 1.0;
     public static final double turnmotorI = 0.0;
     public static final double turnmotorD = 0.0;
 
     public static final double turningFactor = 2 * Math.PI;
 
-    public static double trackWidth = Units.inchesToMeters(21.9635);
-    public static double wheelbase = Units.inchesToMeters(21.9635);
-    public static double kMaxSpeedMPS = 12;
+    public static double trackWidth = Units.inchesToMeters(22.4375);
+    public static double wheelbase = Units.inchesToMeters(22.4375);
+    public static double kMaxSpeedMPS = 25;
     public final static double maxAngularspeed = 4 * Math.PI;
     public static boolean gyroReversed = false;
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(

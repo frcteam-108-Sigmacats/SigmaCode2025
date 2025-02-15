@@ -58,6 +58,8 @@ public class Swervemodule extends SubsystemBase {
     drivemotor = new TalonFX(drivemotorID);
     turnmotor = new SparkMax(turnmotorID,MotorType.kBrushless);
 
+    drivemotor.getConfigurator().apply(new TalonFXConfiguration());
+
     drirveMotorconfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     turnmotorConfig.idleMode(IdleMode.kCoast);
 
@@ -95,6 +97,7 @@ public class Swervemodule extends SubsystemBase {
     absAngleoffset = angleOffset;
     m_desiredstate.angle = new Rotation2d(absEncoder.getPosition());
     drivemotor.setPosition(0);
+    
   }
 
   /**
@@ -146,6 +149,8 @@ public class Swervemodule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(drivemotor.getSupplyVoltage());
+
   }
 
   @Override

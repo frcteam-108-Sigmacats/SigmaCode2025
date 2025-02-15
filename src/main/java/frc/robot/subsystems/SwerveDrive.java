@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveDriveConstants;
 
@@ -37,7 +38,7 @@ public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     gyro.getConfigurator().apply(new Pigeon2Configuration());
-
+ 
     gyro.clearStickyFault_BootDuringEnable();
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveDriveConstants.swerveKinematics, getHeading(), getModulePosition(), new Pose2d());
@@ -80,6 +81,7 @@ public class SwerveDrive extends SubsystemBase {
         states[i] = modules[i].getState();
       }
       return states;
+      
     }
 
     //Gets the modules position (How much did the robot drive forward or backwards and left or right in meters and the direction the wheels are facing)
@@ -118,6 +120,7 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Heading: ", getHeading().getDegrees());
   }
 }
 
