@@ -20,7 +20,7 @@ public final class Constants {
     public static final int algaePivotMotorID = 9;
     public static final int algaeRollerMotorID = 10;
 
-    public static final double pivotP = 0.01;
+    public static final double pivotP = 0.012;
     public static final double pivotI = 0.0;
     public static final double pivotD = 0.0;
 
