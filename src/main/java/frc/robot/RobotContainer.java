@@ -4,10 +4,18 @@
 
 package frc.robot;
 
+import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Swervemodule;
+import frc.robot.commands.AlgaeIntakeCmds.RestAlgaeIntake;
+import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeIntake;
+import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeOuttake;
+import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotPosition;
+import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotSpeed;
+import frc.robot.commands.AlgaeIntakeCmds.TestAlgaeRoller;
+import frc.robot.subsystems.AlgaeIntake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,17 +29,25 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveDrive swerveDrive = new SwerveDrive();
+  private final AlgaeIntake algaeSub = new AlgaeIntake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+      private Trigger bX, bB;
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     boolean fieldRelative = true;
     swerveDrive.setDefaultCommand(new Drive(swerveDrive, m_driverController, fieldRelative));
+    algaeSub.setDefaultCommand(new RestAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeRestPivotPosition, AlgaeIntakeConstants.algaeRestSpeed));
     // Configure the trigger bindings
     configureBindings();
+
+    bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
+    bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
   }
 
   /**
@@ -46,6 +62,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   
+   bX = m_driverController.x();
+   bB = m_driverController.b();
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
