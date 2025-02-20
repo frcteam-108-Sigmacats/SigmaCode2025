@@ -37,7 +37,7 @@ private Trigger upPov, downPov, bA, bY;
 
    // upPov.whileTrue(new SetElevatorSpeed(elevatorsubsystem, 0.3));
    // downPov.whileTrue(new SetElevatorSpeed(elevatorsubsystem, -0.3));
-   bY.whileTrue(new SetElevatorPosition(elevatorsubsystem, 1.0));
+   bY.whileTrue(new SetElevatorPosition(elevatorsubsystem, 5.2));
    bA.whileTrue(new SetElevatorPosition(elevatorsubsystem, 0));
   }
 

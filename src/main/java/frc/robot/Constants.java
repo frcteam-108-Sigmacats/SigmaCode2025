@@ -27,9 +27,9 @@ public final class Constants {
       
     public static final int ElevatorMotorCurrentlimit = 40;
 
-    public static final double piviotP = 0.8;
+    public static final double piviotP = 1.5;
     public static final double piviotI = 0.0;
-    public static final double piviotD = 0.0;
+    public static final double piviotD = 0.01;
   
     public static final double elevatorForwardSoftLimit = 5.2;/*change when robo done */
     public static final double elevatorReverseSoftLimit = 0;
