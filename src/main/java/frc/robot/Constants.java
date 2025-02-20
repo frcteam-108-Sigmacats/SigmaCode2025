@@ -31,8 +31,8 @@ public final class Constants {
     public static final double algaeRestPivotPosition = 0.0;
     public static final double algaeOuttakePivotPosition = 42;
 
-    public static final double algaeIntakeSpeed = 0.55;
-    public static final double algaeRestSpeed = 0.35;
+    public static final double algaeIntakeSpeed = 0.45;
+    public static final double algaeRestSpeed = 0.0;
     public static final double algaeOuttakeSpeed = -0.3;
   }
 }
