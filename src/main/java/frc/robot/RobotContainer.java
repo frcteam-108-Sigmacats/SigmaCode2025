@@ -20,6 +20,7 @@ import frc.robot.commands.CXAWristCmds.TestCXAMotor;
 import frc.robot.commands.CXAWristCmds.TestCoralHopper;
 import frc.robot.commands.CXAWristCmds.TestWristPivot;
 import frc.robot.subsystems.CoralXAlgaeMech;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -35,6 +36,7 @@ public class RobotContainer {
   private final SwerveDrive swerveDrive = new SwerveDrive();
   private final AlgaeIntake algaeSub = new AlgaeIntake();
   private final CoralXAlgaeMech cXASub = new CoralXAlgaeMech();
+  private final Elevator elevatorSub = new Elevator();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
