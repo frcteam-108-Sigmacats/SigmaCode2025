@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveDriveConstants;
@@ -33,6 +34,9 @@ public class SwerveDrive extends SubsystemBase {
 
   private Pigeon2 gyro = new Pigeon2(1);
 
+  private Field2d field = new Field2d();
+  private Vision vision = new Vision();
+
   private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
   private Swervemodule [] modules = {fLeftModule, fRightModule, bLeftModule, bRightModule};
   /** Creates a new SwerveDrive. */
@@ -42,6 +46,8 @@ public class SwerveDrive extends SubsystemBase {
     gyro.clearStickyFault_BootDuringEnable();
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveDriveConstants.swerveKinematics, getHeading(), getModulePosition(), new Pose2d());
+
+    SmartDashboard.putData(field);
   }
     
     public Rotation2d getHeading(){
@@ -119,8 +125,16 @@ public class SwerveDrive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    swerveDrivePoseEstimator.update(getHeading(), getModulePosition());
+    field.setRobotPose(getPose());
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Heading: ", getHeading().getDegrees());
+    if(vision.istheretagLeftLL()){
+      swerveDrivePoseEstimator.addVisionMeasurement(vision.getLeftLLBotPose().pose, vision.getLeftLLBotPose().timestampSeconds);
+    }
+    if(vision.istheretagRightLL()){
+      swerveDrivePoseEstimator.addVisionMeasurement(vision.getRightLLBotPose().pose, vision.getRightLLBotPose().timestampSeconds);
+    }
   }
 }
 
