@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CXAWristCmds.TestCXAMotor;
 import frc.robot.commands.CXAWristCmds.TestCoralHopper;
 import frc.robot.commands.CXAWristCmds.TestWristPivot;
+import frc.robot.commands.CXAWristCmds.TestWristSpeed;
 import frc.robot.subsystems.CoralXAlgaeMech;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,9 +35,13 @@ public class RobotContainer {
   public RobotContainer() {
         // Configure the trigger bindings
     configureBindings();
-    bA.whileTrue(new TestWristPivot(cXASub, 0));
-    bB.whileTrue(new TestCXAMotor(cXASub, 0));
-    bY.whileTrue(new TestCoralHopper(cXASub, 0));
+    // bA.whileTrue(new TestWristPivot(cXASub, 20));
+    // bB.whileTrue(new TestWristPivot (cXASub, 0));
+    bA.whileTrue(new TestCoralHopper(cXASub, -0.5));
+    // bB.whileTrue(new TestCXAMotor(cXASub, -0.1));
+    // bA.whileTrue(new TestWristSpeed(cXASub, 0.1));
+    // bB.whileTrue(new TestWristSpeed(cXASub, -0.1));
+    bY.whileTrue(new TestCoralHopper(cXASub, 0.5));
   }
 
   /**

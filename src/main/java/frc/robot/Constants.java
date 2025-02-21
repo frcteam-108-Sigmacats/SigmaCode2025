@@ -28,20 +28,21 @@ public static final class CoralXAlgaeWristConstants{
 
   public static final int coralDetectorID = 1;
 
-  public static final double pivotP = 0.001;
+  public static final double pivotP = 0.012;
   public static final double pivotI = 0.0;
   public static final double pivotD = 0.0;
   public static final double pivotFF = 1/5676;
+  public static final double maxPositionRange = 90;
 
-  public static final double velocityP = 0.001;
+  public static final double velocityP = 0.005;
   public static final double velocityI = 0.0;
   public static final double velocityD = 0.0;
 
   public static final int coralMotorCurrentLimit = 40;
   public static final int coralHopperMotorCurrentLimit = 20;
-  public static final int coralAlgaeWristCurrentLimit = 20;
+  public static final int coralAlgaeWristCurrentLimit = 30;
 
-  public static final double forwardSoftLimitWrist = 0.0;
+  public static final double forwardSoftLimitWrist = 90;
   public static final double reverseSoftLimitWrist = 0.0;
 }
 }

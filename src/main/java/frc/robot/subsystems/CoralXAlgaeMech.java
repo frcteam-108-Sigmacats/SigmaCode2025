@@ -24,6 +24,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralXAlgaeWristConstants;
@@ -72,16 +73,22 @@ public class CoralXAlgaeMech extends SubsystemBase {
     coralAlgaeWristMotorConfig.smartCurrentLimit(CoralXAlgaeWristConstants.coralAlgaeWristCurrentLimit);
     
     coralAlgaeWristMotorConfig.absoluteEncoder.positionConversionFactor(360);
+    coralAlgaeWristMotorConfig.absoluteEncoder.inverted(true);
     
-    coralAlgaeWristMotorConfig.softLimit.forwardSoftLimitEnabled(true);
-    coralAlgaeWristMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+    // coralAlgaeWristMotorConfig.softLimit.forwardSoftLimitEnabled(true);
+    // coralAlgaeWristMotorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    coralAlgaeWristMotorConfig.softLimit.forwardSoftLimit(CoralXAlgaeWristConstants.forwardSoftLimitWrist);
-    coralAlgaeWristMotorConfig.softLimit.reverseSoftLimit(CoralXAlgaeWristConstants.reverseSoftLimitWrist);
+    // coralAlgaeWristMotorConfig.softLimit.forwardSoftLimit(CoralXAlgaeWristConstants.forwardSoftLimitWrist);
+    // coralAlgaeWristMotorConfig.softLimit.reverseSoftLimit(CoralXAlgaeWristConstants.reverseSoftLimitWrist);
 
     coralAlgaeWristMotorConfig.closedLoop.pid(CoralXAlgaeWristConstants.pivotP, CoralXAlgaeWristConstants.pivotI, CoralXAlgaeWristConstants.pivotD);
     coralAlgaeWristMotorConfig.closedLoop.velocityFF(CoralXAlgaeWristConstants.pivotFF);
     coralAlgaeWristMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+    coralAlgaeWristMotorConfig.closedLoop.positionWrappingEnabled(true);
+    coralAlgaeWristMotorConfig.closedLoop.positionWrappingInputRange(0, CoralXAlgaeWristConstants.maxPositionRange);
+
+    coralDetectorConfig.ProximityParams.ProximityHysteresis = 0.5;
+    coralDetectorConfig.ProximityParams.ProximityThreshold = 1;
 
     wristPIDController = coralAlgaeWristMotor.getClosedLoopController();
     pivotAbsEncoder = coralAlgaeWristMotor.getAbsoluteEncoder();
@@ -147,6 +154,8 @@ public class CoralXAlgaeMech extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Pivot Position", getWristPosition());
+    SmartDashboard.putBoolean("isCoralDetected", getCoralDetection());
   }
 
   @Override
