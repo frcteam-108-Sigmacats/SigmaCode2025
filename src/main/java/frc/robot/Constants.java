@@ -91,5 +91,19 @@ public final class Constants {
     public static final double algaeRestSpeed = 0.0;
     public static final double algaeOuttakeSpeed = -0.3;
   }
+  public static class Elevatorconstants{
+
+    public static final int leftElevatorMotorID = 11 ;
+    public static final int rightElevatorMotorID = 12 ;
+      
+    public static final int ElevatorMotorCurrentlimit = 40;
+
+    public static final double piviotP = 1.5;
+    public static final double piviotI = 0.0;
+    public static final double piviotD = 0.01;
+  
+    public static final double elevatorForwardSoftLimit = 5.2;/*change when robo done */
+    public static final double elevatorReverseSoftLimit = 0;
+  }
 }
 
