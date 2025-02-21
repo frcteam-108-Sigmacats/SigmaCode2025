@@ -9,13 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
-public class vision extends SubsystemBase {
-  private SwerveDrive swervesub = new SwerveDrive(
-
-  );
+public class Vision extends SubsystemBase {
+  private SwerveDrive swervesub = new SwerveDrive();
 
   /** Creates a new vision. */
-  public vision() {
+  public Vision() {
   }
 
   @Override
@@ -54,12 +52,12 @@ public class vision extends SubsystemBase {
     return LimelightHelpers.getTA("RightLL");
   }
 
-  public Boolean istheretagLeftLL() {
-    return LimelightHelpers.getTV("leftLL");
+  public boolean istheretagLeftLL() {
+    return LimelightHelpers.getTV("LeftLL");
 
   }
 
-  public Boolean istheretagRightLL() {
+  public boolean istheretagRightLL() {
     return LimelightHelpers.getTV("RightLL");
   }
 
