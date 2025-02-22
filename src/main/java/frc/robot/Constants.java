@@ -105,6 +105,11 @@ public final class Constants {
   
     public static final double elevatorForwardSoftLimit = 5.2;/*change when robo done */
     public static final double elevatorReverseSoftLimit = 0;
+    public static final double L1 = 1.0;
+    public static final double L2 = 2.0;
+    public static final double L3 = 3.0;
+    public static final double L4 = 4.0;
+    
   }
 public static final class CoralXAlgaeWristConstants{
   public static final int cXAMotorID = 13;
@@ -129,8 +134,11 @@ public static final class CoralXAlgaeWristConstants{
   public static final double forwardSoftLimitWrist = 0.0;
   public static final double reverseSoftLimitWrist = 0.0;
 
+  public static final double WristOuttakeVelocity = -2000;
+
   public static final double cxaMotorFeedVelocity = -4000;
   public static final double coralHopperSpeed = 0.5;
 }
+
 }
 
