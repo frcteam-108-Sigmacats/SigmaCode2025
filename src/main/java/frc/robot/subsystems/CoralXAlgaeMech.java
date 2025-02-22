@@ -149,6 +149,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Is Coral Detected: ", getCoralDetection());
     SmartDashboard.putNumber("Wrist Angle", getWristPosition());
   }
 

@@ -7,7 +7,11 @@ package frc.robot;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
+<<<<<<< HEAD
 import frc.robot.commands.SetReefLevel;
+=======
+import frc.robot.commands.HumanStationFeeder;
+>>>>>>> 3ddf9359e6bdadb20d82233029d36f909ab820c1
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Swervemodule;
 import frc.robot.commands.AlgaeIntakeCmds.RestAlgaeIntake;
@@ -66,6 +70,7 @@ public class RobotContainer {
     // LT.whileTrue(new ReefScore(elevatorSub, cXASub, false));
     // LT.whileFalse(new ReefScore(elevatorSub, cXASub, true));
     /*bA.whileTrue(new TestWristPivot(cXASub, 0));
+    bA.whileTrue(new HumanStationFeeder(cXASub, elevatorSub));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
     bY.whileTrue(new TestCoralHopper(cXASub, 0));*/
   }
