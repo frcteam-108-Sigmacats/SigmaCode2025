@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.HumanStationFeeder;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Swervemodule;
 import frc.robot.commands.AlgaeIntakeCmds.RestAlgaeIntake;
@@ -20,6 +21,7 @@ import frc.robot.commands.CXAWristCmds.TestCXAMotor;
 import frc.robot.commands.CXAWristCmds.TestCoralHopper;
 import frc.robot.commands.CXAWristCmds.TestWristPivot;
 import frc.robot.subsystems.CoralXAlgaeMech;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -35,6 +37,7 @@ public class RobotContainer {
   private final SwerveDrive swerveDrive = new SwerveDrive();
   private final AlgaeIntake algaeSub = new AlgaeIntake();
   private final CoralXAlgaeMech cXASub = new CoralXAlgaeMech();
+  private final Elevator elevatorSub = new Elevator();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -55,7 +58,7 @@ public class RobotContainer {
     bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
         // Configure the trigger bindings
     configureBindings();
-    bA.whileTrue(new TestWristPivot(cXASub, 0));
+    bA.whileTrue(new HumanStationFeeder(cXASub, elevatorSub));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
     bY.whileTrue(new TestCoralHopper(cXASub, 0));
   }

@@ -128,6 +128,9 @@ public static final class CoralXAlgaeWristConstants{
 
   public static final double forwardSoftLimitWrist = 0.0;
   public static final double reverseSoftLimitWrist = 0.0;
+
+  public static final double cxaMotorFeedVelocity = -4000;
+  public static final double coralHopperSpeed = 0.5;
 }
 }
 
