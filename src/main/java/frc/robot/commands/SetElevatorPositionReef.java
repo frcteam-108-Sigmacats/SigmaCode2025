@@ -7,9 +7,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CXAReefScore extends Command {
-  /** Creates a new CXAReefScore. */
-  public CXAReefScore() {
+public class SetElevatorPositionReef extends Command {
+  /** Creates a new SetElevatorPositionReef. */
+  public SetElevatorPositionReef() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

@@ -37,7 +37,7 @@ public class SwerveDrive extends SubsystemBase {
   private Field2d field = new Field2d();
   private Vision vision = new Vision();
 
-  private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+  private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
   private Swervemodule [] modules = {fLeftModule, fRightModule, bLeftModule, bRightModule};
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -54,7 +54,7 @@ public class SwerveDrive extends SubsystemBase {
       return Rotation2d.fromDegrees(-Math.IEEEremainder(gyro.getYaw().getValueAsDouble(), 360));
     }
 
-    public Pose2d getPose(){
+    public static Pose2d getPose(){
       return swerveDrivePoseEstimator.getEstimatedPosition();
     }
     public void zeroHeading(){

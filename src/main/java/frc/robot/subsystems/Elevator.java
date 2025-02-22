@@ -30,6 +30,8 @@ public class Elevator extends SubsystemBase {
  private SparkMaxConfig leftElevatorMotorConfig = new SparkMaxConfig();
  private SparkMaxConfig rightElevatorMotorConfig = new SparkMaxConfig();
 
+ private int reefScoreLevel = 1;
+
  private SparkClosedLoopController elevatorPIDController;
  
  private RelativeEncoder elevatorencoder;
@@ -81,6 +83,12 @@ rightElevatorMotor.set(Speed);}
 public double getElevatorPosition(){
   return elevatorencoder.getPosition();
 }
+public void setReefLevel(int level){
+  reefScoreLevel = level;
+}
+public int getReefLevel(){
+  return reefScoreLevel;
+}
   
 
 /**
@@ -110,6 +118,7 @@ public double getElevatorPosition(){
 
   @Override
   public void periodic(){
+    SmartDashboard.putNumber("Reef Level", reefScoreLevel);
   SmartDashboard.putNumber("Elevator position: ", getElevatorPosition());
   }
     // This method will be called once per scheduler run

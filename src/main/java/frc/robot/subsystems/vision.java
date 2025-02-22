@@ -10,7 +10,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class Vision extends SubsystemBase {
-  private SwerveDrive swervesub = new SwerveDrive();
+  
 
   /** Creates a new vision. */
   public Vision() {
@@ -20,11 +20,10 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     LimelightHelpers.SetRobotOrientation("LeftLL",
-        swervesub.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    SwerveDrive.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
-    LimelightHelpers.SetRobotOrientation("RightLL",
-        swervesub.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-  }
+LimelightHelpers.SetRobotOrientation("RightLL",
+    SwerveDrive.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);}
 
   public double getLeftLLTX() {
     return LimelightHelpers.getTX("LeftLL");

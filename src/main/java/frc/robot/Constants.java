@@ -135,6 +135,8 @@ public static final class CoralXAlgaeWristConstants{
   public static final double reverseSoftLimitWrist = 0.0;
 
   public static final double WristOuttakeVelocity = -2000;
+
+  public static final double wristOuttakePosition = 30;
 }
 
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.SetReefLevel;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Swervemodule;
 import frc.robot.commands.AlgaeIntakeCmds.RestAlgaeIntake;
@@ -15,6 +16,7 @@ import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeOuttake;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotPosition;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotSpeed;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaeRoller;
+import frc.robot.commands.ReefScore;
 import frc.robot.subsystems.AlgaeIntake;
 import frc.robot.commands.CXAWristCmds.TestCXAMotor;
 import frc.robot.commands.CXAWristCmds.TestCoralHopper;
@@ -42,7 +44,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private Trigger bX, bB, bA, bY;
+  private Trigger bX, bB, bA, bY, LT;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -53,13 +55,19 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
-    bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
+   // bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
+   // bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
         // Configure the trigger bindings
     configureBindings();
-    bA.whileTrue(new TestWristPivot(cXASub, 0));
+    bA.onTrue(new SetReefLevel(elevatorSub, 1));
+bB.onTrue(new SetReefLevel(elevatorSub, 2));
+bY.onTrue(new SetReefLevel(elevatorSub, 3));
+bX.onTrue(new SetReefLevel(elevatorSub, 4));
+LT.whileTrue(new ReefScore(elevatorSub, cXASub, false));
+LT.whileFalse(new ReefScore(elevatorSub, cXASub, true));
+    /*bA.whileTrue(new TestWristPivot(cXASub, 0));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
-    bY.whileTrue(new TestCoralHopper(cXASub, 0));
+    bY.whileTrue(new TestCoralHopper(cXASub, 0));*/
   }
 
   /**
@@ -73,10 +81,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-  
+   bA = m_driverController.a();
    bX = m_driverController.x();
    bB = m_driverController.b();
-
+   bY = m_driverController.y();
+   LT = m_driverController.leftTrigger();
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     
