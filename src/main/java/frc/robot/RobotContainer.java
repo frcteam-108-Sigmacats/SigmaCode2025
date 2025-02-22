@@ -16,11 +16,11 @@ import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeOuttake;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotPosition;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaePivotSpeed;
 import frc.robot.commands.AlgaeIntakeCmds.TestAlgaeRoller;
-import frc.robot.commands.ReefScore;
 import frc.robot.subsystems.AlgaeIntake;
 import frc.robot.commands.CXAWristCmds.TestCXAMotor;
 import frc.robot.commands.CXAWristCmds.TestCoralHopper;
 import frc.robot.commands.CXAWristCmds.TestWristPivot;
+import frc.robot.commands.ControllerCmds.ReefScore;
 import frc.robot.subsystems.CoralXAlgaeMech;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -60,11 +60,11 @@ public class RobotContainer {
         // Configure the trigger bindings
     configureBindings();
     bA.onTrue(new SetReefLevel(elevatorSub, 1));
-bB.onTrue(new SetReefLevel(elevatorSub, 2));
-bY.onTrue(new SetReefLevel(elevatorSub, 3));
-bX.onTrue(new SetReefLevel(elevatorSub, 4));
-LT.whileTrue(new ReefScore(elevatorSub, cXASub, false));
-LT.whileFalse(new ReefScore(elevatorSub, cXASub, true));
+    bB.onTrue(new SetReefLevel(elevatorSub, 2));
+    bY.onTrue(new SetReefLevel(elevatorSub, 3));
+    bX.onTrue(new SetReefLevel(elevatorSub, 4));
+    // LT.whileTrue(new ReefScore(elevatorSub, cXASub, false));
+    // LT.whileFalse(new ReefScore(elevatorSub, cXASub, true));
     /*bA.whileTrue(new TestWristPivot(cXASub, 0));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
     bY.whileTrue(new TestCoralHopper(cXASub, 0));*/

@@ -4,22 +4,55 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.CoralXAlgaeWristConstants;
+import frc.robot.subsystems.CoralXAlgaeMech;
+import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CXAReefScore extends Command {
+  private CoralXAlgaeMech cxaMech;
+  private Elevator elevatorSub;
+  private boolean readyToExecute;
+  private int counter;
+  private boolean isFinished;
   /** Creates a new CXAReefScore. */
-  public CXAReefScore() {
+  public CXAReefScore(CoralXAlgaeMech cxaMech, Elevator elevatorSub, boolean readyToExecute) {
+    this.cxaMech = cxaMech;
+    this.elevatorSub = elevatorSub;
+    this.readyToExecute = readyToExecute;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(cxaMech);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+    isFinished = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(elevatorSub.getReefLevel() == 4){
+      cxaMech.setWristPivot(CoralXAlgaeWristConstants.l4WristPosition);
+    }
+    else{
+      cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
+    }
+    if(readyToExecute){
+      cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.WristOuttakeVelocity);
+      counter++;
+    }
+    else{
+      cxaMech.setCXAVelocity(0);
+    }
+    if(counter >= 25){
+      isFinished = true;
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -28,6 +61,6 @@ public class CXAReefScore extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }
