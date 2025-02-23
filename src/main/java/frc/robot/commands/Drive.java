@@ -25,8 +25,8 @@ private Translation2d translation;
   private CommandXboxController m_driverController;
   
 
-  private SlewRateLimiter yLim = new SlewRateLimiter(3);
-  private SlewRateLimiter xLim = new SlewRateLimiter(2);
+  private SlewRateLimiter yLim = new SlewRateLimiter(20);
+  private SlewRateLimiter xLim = new SlewRateLimiter(20);
   private SlewRateLimiter rotLim = new SlewRateLimiter(1);
 
 
@@ -46,13 +46,15 @@ private Translation2d translation;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double yAxis = -m_driverController.getLeftY();
-    double xAxis = -m_driverController.getLeftX();
+    double yAxis = m_driverController.getLeftY();
+    double xAxis = m_driverController.getLeftX();
     double rotAxis = -m_driverController.getRightX();
 // y=0 x=0.0//
-    yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis * 10));
-    xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.0 : (xAxis * 10));
+    yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis * 2.5));
+    xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.0 : (xAxis * 2.5));
     rotAxis = (Math.abs(rotAxis) < SwerveDriveConstants.deadband ? 0 : (rotAxis * 10));
+    yAxis = yLim.calculate(yAxis);
+    xAxis = xLim.calculate(xAxis);
 
     translation = new Translation2d(yAxis, xAxis).times(SwerveDriveConstants.kMaxSpeedMPS);
     rotation = rotAxis * SwerveDriveConstants.maxAngularspeed;

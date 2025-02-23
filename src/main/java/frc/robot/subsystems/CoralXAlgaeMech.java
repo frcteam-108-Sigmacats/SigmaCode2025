@@ -84,6 +84,8 @@ public class CoralXAlgaeMech extends SubsystemBase {
     coralAlgaeWristMotorConfig.closedLoop.pid(CoralXAlgaeWristConstants.pivotP, CoralXAlgaeWristConstants.pivotI, CoralXAlgaeWristConstants.pivotD);
     coralAlgaeWristMotorConfig.closedLoop.velocityFF(CoralXAlgaeWristConstants.pivotFF);
     coralAlgaeWristMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+    coralAlgaeWristMotorConfig.closedLoop.positionWrappingEnabled(true);
+    coralAlgaeWristMotorConfig.closedLoop.positionWrappingInputRange(0, 360);
 
     wristPIDController = coralAlgaeWristMotor.getClosedLoopController();
     pivotAbsEncoder = coralAlgaeWristMotor.getAbsoluteEncoder();

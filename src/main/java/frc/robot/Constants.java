@@ -4,6 +4,13 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -62,7 +69,7 @@ public final class Constants {
 
     public static double trackWidth = Units.inchesToMeters(22.4375);
     public static double wheelbase = Units.inchesToMeters(22.4375);
-    public static double kMaxSpeedMPS = 25;
+    public static double kMaxSpeedMPS = 21;
     public final static double maxAngularspeed = 4 * Math.PI;
     public static boolean gyroReversed = false;
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
@@ -105,10 +112,10 @@ public final class Constants {
   
     public static final double elevatorForwardSoftLimit = 5.2;/*change when robo done */
     public static final double elevatorReverseSoftLimit = 0;
-    public static final double L1 = 1.0;
-    public static final double L2 = 2.0;
-    public static final double L3 = 3.0;
-    public static final double L4 = 4.0;
+    public static final double L1 = 0.0;
+    public static final double L2 = 1.1;
+    public static final double L3 = 2.5;
+    public static final double L4 = 5.1;
     
   }
 public static final class CoralXAlgaeWristConstants{
@@ -118,7 +125,7 @@ public static final class CoralXAlgaeWristConstants{
 
   public static final int coralDetectorID = 1;
 
-  public static final double pivotP = 0.001;
+  public static final double pivotP = 0.01;
   public static final double pivotI = 0.0;
   public static final double pivotD = 0.0;
   public static final double pivotFF = 1/5676;
@@ -141,6 +148,41 @@ public static final class CoralXAlgaeWristConstants{
 
   public static final double l4WristPosition = 30;
   public static final double restWristPosition = 0;
+}
+
+public static final class VisionConstants{
+  public static final Map<Integer, Pose2d> leftBluePoses= (Map<Integer, Pose2d>) 
+    Map.of(17, new Pose2d(new Translation2d(3.656, 2.892), Rotation2d.fromDegrees(60)), 
+    18, new Pose2d(new Translation2d(3.093, 4.187), Rotation2d.fromDegrees(0)),
+    19, new Pose2d(new Translation2d(3.956, 5.278), Rotation2d.fromDegrees(-60)),
+    20, new Pose2d(new Translation2d(5.394, 5.134), Rotation2d.fromDegrees(-120)),
+    21, new Pose2d(new Translation2d(5.886, 3.863), Rotation2d.fromDegrees(180)),
+    22, new Pose2d(new Translation2d(5.023, 2.736), Rotation2d.fromDegrees(120))
+  );
+  public static final Map<Integer, Pose2d> leftRedPoses= (Map<Integer, Pose2d>) 
+    Map.of(6, new Pose2d(new Translation2d(13.606, 2.736), Rotation2d.fromDegrees(120)), 
+    7, new Pose2d(new Translation2d(14.433, 3.875), Rotation2d.fromDegrees(180)),
+    8, new Pose2d(new Translation2d(13.906, 5.122), Rotation2d.fromDegrees(-120)),
+    9, new Pose2d(new Translation2d(12.503, 5.278), Rotation2d.fromDegrees(-60)),//5.278
+    10, new Pose2d(new Translation2d(11.500, 4.163), Rotation2d.fromDegrees(0)),//11.712 is where it is right now
+    11, new Pose2d(new Translation2d(12.239, 2.892), Rotation2d.fromDegrees(60))
+  );
+  public static final Map<Integer, Pose2d> rightBluePoses= (Map<Integer, Pose2d>) 
+    Map.of(17, new Pose2d(new Translation2d(3.932, 2.736), Rotation2d.fromDegrees(60)), 
+    18, new Pose2d(new Translation2d(3.153, 3.863), Rotation2d.fromDegrees(0)),
+    19, new Pose2d(new Translation2d(3.668, 5.122), Rotation2d.fromDegrees(-60)),
+    20, new Pose2d(new Translation2d(5.047, 5.278), Rotation2d.fromDegrees(-120)),
+    21, new Pose2d(new Translation2d(5.850, 4.163), Rotation2d.fromDegrees(180)),
+    22, new Pose2d(new Translation2d(5.311, 2.904), Rotation2d.fromDegrees(120))
+  );
+  public static final Map<Integer, Pose2d> rightRedPoses= (Map<Integer, Pose2d>) 
+    Map.of(6, new Pose2d(new Translation2d(13.870, 2.916), Rotation2d.fromDegrees(120)), 
+    7, new Pose2d(new Translation2d(14.421, 4.175), Rotation2d.fromDegrees(180)),
+    8, new Pose2d(new Translation2d(13.594, 5.302), Rotation2d.fromDegrees(-120)),
+    9, new Pose2d(new Translation2d(12.263, 5.134), Rotation2d.fromDegrees(-60)),
+    10, new Pose2d(new Translation2d(11.700, 3.827), Rotation2d.fromDegrees(0)),
+    11, new Pose2d(new Translation2d(12.515, 2.748), Rotation2d.fromDegrees(60))
+  );
 }
 
 

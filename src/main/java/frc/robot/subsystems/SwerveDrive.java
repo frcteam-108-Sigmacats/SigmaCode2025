@@ -4,22 +4,39 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.Constants.VisionConstants;
 
 public class SwerveDrive extends SubsystemBase {
   
@@ -32,6 +49,8 @@ public class SwerveDrive extends SubsystemBase {
 
   public final Swervemodule bRightModule = new Swervemodule(SwerveDriveConstants.bRDriveMotorID,SwerveDriveConstants.bRTurnMotorID, SwerveDriveConstants.bRAbsEncoderOffset);
 
+  private boolean isBlueAlliance;
+
   private Pigeon2 gyro = new Pigeon2(1);
 
   private Field2d field = new Field2d();
@@ -39,6 +58,12 @@ public class SwerveDrive extends SubsystemBase {
 
   private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
   private Swervemodule [] modules = {fLeftModule, fRightModule, bLeftModule, bRightModule};
+
+  // private SlewRateLimiter driveLimiter = new SlewRateLimiter(70);
+  // private SlewRateLimiter turnLimiter= new SlewRateLimiter(70);
+  // private SlewRateLimiter rotLimiter = new SlewRateLimiter(10);
+
+  private Pose2d targetPose = new Pose2d();
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     gyro.getConfigurator().apply(new Pigeon2Configuration());
@@ -47,18 +72,51 @@ public class SwerveDrive extends SubsystemBase {
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveDriveConstants.swerveKinematics, getHeading(), getModulePosition(), new Pose2d());
 
+    if(DriverStation.getAlliance().get() == Alliance.Blue){
+      isBlueAlliance = true;
+    }
+    else{
+      isBlueAlliance = false;
+    }
+
+    try{
+      RobotConfig config = RobotConfig.fromGUISettings();
+
+      AutoBuilder.configure(
+      this::getPose, 
+      this::resetEstimator, 
+      this::getSpeeds, 
+      this::driveRobotRelative, 
+      new PPHolonomicDriveController(new PIDConstants(3.0,0.0,0.0), new PIDConstants(3.0,0.0,0.0)), 
+      config, 
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()){
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+       this);
+    }
+    catch(Exception e){
+      DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+    }
+
     SmartDashboard.putData(field);
   }
     
     public Rotation2d getHeading(){
-      return Rotation2d.fromDegrees(-Math.IEEEremainder(gyro.getYaw().getValueAsDouble(), 360));
+      return Rotation2d.fromDegrees(Math.IEEEremainder(gyro.getYaw().getValueAsDouble(), 360));
     }
 
-    public static Pose2d getPose(){
+    public Pose2d getPose(){
       return swerveDrivePoseEstimator.getEstimatedPosition();
     }
-    public void zeroHeading(){
-      gyro.reset();
+    public static Pose2d getPoseForVision(){
+      return swerveDrivePoseEstimator.getEstimatedPosition();
+    }
+    public void zeroHeading(Rotation2d heading){
+      swerveDrivePoseEstimator.resetPosition(getHeading(), getModulePosition(), new Pose2d(getPose().getTranslation(), heading));
     }
     public void drive(Translation2d translation, double rotation, boolean fieldRelative){
       SwerveModuleState[] swerveModuleStates =
@@ -67,7 +125,7 @@ public class SwerveDrive extends SubsystemBase {
                                   translation.getX(), 
                                   translation.getY(), 
                                   rotation, 
-                                  getYaw()
+                                  getYaw().minus(getAllianceColor() ? Rotation2d.kZero : Rotation2d.kPi)
                               )
                               : new ChassisSpeeds(
                                   translation.getX(), 
@@ -81,6 +139,14 @@ public class SwerveDrive extends SubsystemBase {
         bRightModule.setDesiredState(swerveModuleStates[3]);
     }
 
+    public void setModuleStates(SwerveModuleState[] desiredStates){
+      SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveDriveConstants.kMaxSpeedMPS);
+        fLeftModule.setDesiredState(desiredStates[0]);
+        fRightModule.setDesiredState(desiredStates[1]);
+        bLeftModule.setDesiredState(desiredStates[2]);
+        bRightModule.setDesiredState(desiredStates[3]);
+    }
+
      public SwerveModuleState[] getModuleStates(){
       SwerveModuleState[] states = new SwerveModuleState[4];
       for(int i = 0; i < states.length; i++){
@@ -89,6 +155,31 @@ public class SwerveDrive extends SubsystemBase {
       return states;
       
     }
+    public boolean getAllianceColor(){
+      return isBlueAlliance;
+    }
+    // public Command SwervePoseGeneration(boolean left){
+    //   Pose2d targetPose = new Pose2d();
+    //   if(isBlueAlliance){
+    //     targetPose = left? VisionConstants.leftBluePoses.get((int) vision.getLeftLLTagID()): VisionConstants.rightBluePoses.get((int) vision.getLeftLLTagID());
+    //   }
+    //   else{
+    //     targetPose = left? VisionConstants.leftRedPoses.get((int) vision.getLeftLLTagID()): VisionConstants.rightRedPoses.get((int) vision.getLeftLLTagID());
+
+    //   }
+    //   // List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+    //   //   getPose(),
+    //   //   targetPose
+    //   // );
+    //   // PathConstraints constraints = new PathConstraints(3.0, 4.0, 2 * Math.PI, 4 * Math.PI);
+    //   // PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, 
+    //   // new GoalEndState(0, targetPose.getRotation()));
+    //   // return runOnce(()-> 
+    //   // AutoBuilder.followPath(path));
+    //   PathConstraints constraints = new PathConstraints(6.0, 7.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+    //   Command pathFindCommand = AutoBuilder.pathfindToPose(targetPose, constraints);
+    //   return pathFindCommand;
+    // }
 
     //Gets the modules position (How much did the robot drive forward or backwards and left or right in meters and the direction the wheels are facing)
     public SwerveModulePosition[] getModulePosition(){
@@ -97,6 +188,13 @@ public class SwerveDrive extends SubsystemBase {
         positions[i] = modules[i].getModulePosition();
       }
       return positions;
+    }
+
+    public void setTargetPose(Pose2d tgPose){
+      targetPose = tgPose;
+    }
+    public Pose2d getTargetPose(){
+      return targetPose.transformBy(new Transform2d(0.25, 0, Rotation2d.kZero));
     }
 
     //Resetting the Pose Estimator
@@ -118,6 +216,21 @@ public class SwerveDrive extends SubsystemBase {
     return (SwerveDriveConstants.gyroReversed) ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
   }
 
+  public ChassisSpeeds getSpeeds(){
+    SwerveModuleState[] states = getModuleStates();
+    return SwerveDriveConstants.swerveKinematics.toChassisSpeeds(states);
+  }
+
+  public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds){
+    driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
+  }
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds){
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+    SwerveModuleState[] targetStates = SwerveDriveConstants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+
+    setModuleStates(targetStates);
+  }
+
     
     
 
@@ -129,6 +242,12 @@ public class SwerveDrive extends SubsystemBase {
     field.setRobotPose(getPose());
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Heading: ", getHeading().getDegrees());
+    SmartDashboard.putNumber("Robot Pose X: ", getPose().getX());
+    SmartDashboard.putNumber("Robot Pose Y: ", getPose().getY());
+    SmartDashboard.putNumber("Robot Pose Rotation: ", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Robot Target Pose X: ", getTargetPose().getX());
+    SmartDashboard.putNumber("Robot Target Pose Y: ", getTargetPose().getY());
+    SmartDashboard.putNumber("Robot Target Pose Rotation: ", getTargetPose().getRotation().getDegrees());
     if(vision.istheretagLeftLL()){
       swerveDrivePoseEstimator.addVisionMeasurement(vision.getLeftLLBotPose().pose, vision.getLeftLLBotPose().timestampSeconds);
     }

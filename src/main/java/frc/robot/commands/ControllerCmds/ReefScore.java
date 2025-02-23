@@ -15,9 +15,9 @@ import frc.robot.subsystems.Elevator;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ReefScore extends ParallelRaceGroup {
   /** Creates a new ReefScore. */
-  public ReefScore(Elevator elevatorSub, CoralXAlgaeMech cxaMech, boolean readyToExecute) {
+  public ReefScore(Elevator elevatorSub, CoralXAlgaeMech cxaMech, boolean readyToExecute, int level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetElevatorPositionReef(elevatorSub), new CXAReefScore(cxaMech, elevatorSub, readyToExecute));
+    addCommands(new SetElevatorPositionReef(elevatorSub, level), new CXAReefScore(cxaMech, elevatorSub, readyToExecute, level));
   }
 }

@@ -14,6 +14,7 @@ public class SetReefLevel extends InstantCommand {
   private Elevator elevatorSub;
   private int level;
   public SetReefLevel(Elevator elevatorSub, int level) {
+    this.elevatorSub = elevatorSub;
     this.level = level;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSub);

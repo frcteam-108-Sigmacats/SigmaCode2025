@@ -13,8 +13,9 @@ public class SetElevatorPositionReef extends Command {
   private Elevator elevatorSub;
   private int level;
   /** Creates a new SetElevatorPositionReef. */
-  public SetElevatorPositionReef(Elevator elevatorSub) {
+  public SetElevatorPositionReef(Elevator elevatorSub, int level) {
     this.elevatorSub = elevatorSub;
+    this.level = level;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSub);
   }
@@ -22,7 +23,6 @@ public class SetElevatorPositionReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    level = elevatorSub.getReefLevel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +46,7 @@ public class SetElevatorPositionReef extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {  }
 
   // Returns true when the command should end.
   @Override

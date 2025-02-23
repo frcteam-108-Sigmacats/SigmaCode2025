@@ -29,6 +29,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -60,7 +61,7 @@ public class Swervemodule extends SubsystemBase {
 
     drivemotor.getConfigurator().apply(new TalonFXConfiguration());
 
-    drirveMotorconfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    drirveMotorconfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     turnmotorConfig.idleMode(IdleMode.kCoast);
 
     drirveMotorconfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -125,11 +126,11 @@ public class Swervemodule extends SubsystemBase {
   }
 
   public SwerveModuleState getState(){
-    return new SwerveModuleState(drivemotor.getVelocity().getValueAsDouble(),
+    return new SwerveModuleState(Units.rotationsToRadians(drivemotor.getVelocity().getValueAsDouble()) * Units.inchesToMeters(3.0) * 0.5,
     new Rotation2d(absEncoder.getPosition() - absAngleoffset));
   }
   public SwerveModulePosition getModulePosition(){
-    return new SwerveModulePosition(drivemotor.getPosition().getValueAsDouble(),
+    return new SwerveModulePosition(Units.rotationsToRadians(drivemotor.getPosition().getValueAsDouble()) * Units.inchesToMeters(3.0) * 0.5,
    new Rotation2d(absEncoder.getPosition()- absAngleoffset));
   }
    public void setDesiredState(SwerveModuleState desiredstate){
@@ -139,7 +140,7 @@ public class Swervemodule extends SubsystemBase {
 
     correctedDesiredState.optimize(new Rotation2d(absEncoder.getPosition()));
 
-    drivemotor.setControl(velocity.withVelocity(correctedDesiredState.speedMetersPerSecond));
+    drivemotor.setControl(velocity.withVelocity(Units.radiansToRotations(correctedDesiredState.speedMetersPerSecond / (Units.inchesToMeters(3.0) * 0.5))));
 
     turnPIDcontroller.setReference(correctedDesiredState.angle.getRadians(),
     ControlType.kPosition);
@@ -149,7 +150,7 @@ public class Swervemodule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(drivemotor.getSupplyVoltage());
+    // System.out.println(drivemotor.getSupplyVoltage());
 
   }
 

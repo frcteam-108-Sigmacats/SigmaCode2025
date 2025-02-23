@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.CoralXAlgaeWristConstants;
 import frc.robot.Constants.Elevatorconstants;
@@ -12,60 +11,46 @@ import frc.robot.subsystems.CoralXAlgaeMech;
 import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CXAReefScore extends Command {
-  private CoralXAlgaeMech cxaMech;
+public class ElevatorRestCommand extends Command {
   private Elevator elevatorSub;
-  private boolean readyToExecute;
+  private CoralXAlgaeMech cxaMech;
+  private boolean elevatorAtL4;
   private int counter;
-  private boolean isFinished;
-  private int level;
-  /** Creates a new CXAReefScore. */
-  public CXAReefScore(CoralXAlgaeMech cxaMech, Elevator elevatorSub, boolean readyToExecute, int level) {
-    this.cxaMech = cxaMech;
+  /** Creates a new ElevatorRestCommand. */
+  public ElevatorRestCommand(Elevator elevatorSub, CoralXAlgaeMech cxaMech) {
     this.elevatorSub = elevatorSub;
-    this.readyToExecute = readyToExecute;
-    this.level = level;
+    this.cxaMech = cxaMech;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(cxaMech);
+    addRequirements(elevatorSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     counter = 0;
-    isFinished = false;
+    if(Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.2){
+      elevatorAtL4 = true;
+    }
+    else{
+      elevatorAtL4 = false;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(level == 4){
-      if(Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.1)
-      cxaMech.setWristPivot(CoralXAlgaeWristConstants.l4WristPosition);
-    }
-    else{
-      cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
-    }
-    if(readyToExecute){
-      cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
-      counter++;
-      System.out.println("Counter: "+ counter );
-    }
-    else{
-      cxaMech.setCXAVelocity(0);
-    }
-    if(counter >= 25){
-      isFinished = true;
+    if(Math.abs(CoralXAlgaeWristConstants.restWristPosition - cxaMech.getWristPosition()) <= 5 || cxaMech.getWristPosition() >= 355){
+      elevatorSub.setElevatorPosition(0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    return false;
   }
 }

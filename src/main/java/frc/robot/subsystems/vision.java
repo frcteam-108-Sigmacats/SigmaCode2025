@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class Vision extends SubsystemBase {
-  
+  // private NetworkTable
 
   /** Creates a new vision. */
   public Vision() {
@@ -19,51 +21,71 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    LimelightHelpers.SetRobotOrientation("LeftLL",
-    SwerveDrive.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-leftll",
+    SwerveDrive.getPoseForVision().getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
-LimelightHelpers.SetRobotOrientation("RightLL",
-    SwerveDrive.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);}
+LimelightHelpers.SetRobotOrientation("limelight-rightll",
+    SwerveDrive.getPoseForVision().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+  SmartDashboard.putBoolean("Left LL Tag Detected", istheretagLeftLL());
+  SmartDashboard.putBoolean("Right LL Tag Detected", istheretagRightLL());
+  SmartDashboard.putNumber("Left LL Tag ID", (int)getLeftLLTagID());
+  SmartDashboard.putNumber("Right LL Tag Detected", (int)getRightLLTagID());
+
+  }
 
   public double getLeftLLTX() {
-    return LimelightHelpers.getTX("LeftLL");
+    return LimelightHelpers.getTX("limelight-leftll");
   }
 
   public double getRightLLTX() {
-    return LimelightHelpers.getTX("RightLL");
+    return LimelightHelpers.getTX("limelight-rightll");
   }
 
   public double getLeftLLTY() {
-    return LimelightHelpers.getTY("LeftLL");
+    return LimelightHelpers.getTY("limelight-leftll");
 
   }
 
   public double getRightLLTY() {
-    return LimelightHelpers.getTY("RightLL");
+    return LimelightHelpers.getTY("limelight-rightll");
 
   }
 
   public double getLeftLLTA() {
-    return LimelightHelpers.getTA("LeftLL");
+    return LimelightHelpers.getTA("limelight-leftll");
   }
 
   public double getRightLLTA() {
-    return LimelightHelpers.getTA("RightLL");
+    return LimelightHelpers.getTA("limelight-rightll");
   }
 
   public boolean istheretagLeftLL() {
-    return LimelightHelpers.getTV("LeftLL");
+    return LimelightHelpers.getTV("limelight-leftll");
 
   }
 
   public boolean istheretagRightLL() {
-    return LimelightHelpers.getTV("RightLL");
+    return LimelightHelpers.getTV("limelight-rightll");
+  }
+
+  public double getLeftLLTagID(){
+    return LimelightHelpers.getFiducialID("limelight-leftll");
+  }
+
+  public double getRightLLTagID(){
+    return LimelightHelpers.getFiducialID("limelight-rightll");
   }
 
   public PoseEstimate getLeftLLBotPose() {
-    return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("LeftLL");
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-leftll");
   }
   public PoseEstimate getRightLLBotPose() {
-    return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("RightLL");
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-rightll");
+  }
+  public double[] getLeftLLTargetBotPose() {
+    return LimelightHelpers.getTargetPose_RobotSpace("limelight-leftll");
+  }
+  public double[] getRightLLTargetBotPose() {
+    return LimelightHelpers.getTargetPose_RobotSpace("limelight-rightll");
   }
 }
