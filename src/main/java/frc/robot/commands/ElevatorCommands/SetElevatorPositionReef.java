@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Elevatorconstants;
@@ -11,9 +11,9 @@ import frc.robot.subsystems.Elevator;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetElevatorPositionReef extends Command {
   private Elevator elevatorSub;
-  private int level;
+  private String level;
   /** Creates a new SetElevatorPositionReef. */
-  public SetElevatorPositionReef(Elevator elevatorSub, int level) {
+  public SetElevatorPositionReef(Elevator elevatorSub, String level) {
     this.elevatorSub = elevatorSub;
     this.level = level;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -29,17 +29,23 @@ public class SetElevatorPositionReef extends Command {
   @Override
   public void execute() {
     switch(level){
-      case 1:
+      case "L1":
         elevatorSub.setElevatorPosition(Elevatorconstants.L1);
         break;
-      case 2:
+      case "L2":
         elevatorSub.setElevatorPosition(Elevatorconstants.L2);
         break;
-      case 3:
+      case "L3":
         elevatorSub.setElevatorPosition(Elevatorconstants.L3);
         break;
-      case 4:
+      case "L4":
         elevatorSub.setElevatorPosition(Elevatorconstants.L4);
+        break;
+      case "A1":
+        elevatorSub.setElevatorPosition(Elevatorconstants.A1);
+        break;
+      case "A2":
+        elevatorSub.setElevatorPosition(Elevatorconstants.A2);
         break;
     }
   }

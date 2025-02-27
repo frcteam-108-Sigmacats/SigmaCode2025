@@ -30,6 +30,8 @@ public class AlgaeIntake extends SubsystemBase {
   private SparkClosedLoopController pivotPIDController;
 
   private AbsoluteEncoder pivotAbsEncoder;
+
+  private boolean isThereAlgae;
   /** Creates a new ExampleSubsystem. */
   public AlgaeIntake() {
     algaePivotMotor = new SparkMax(AlgaeIntakeConstants.algaePivotMotorID, MotorType.kBrushless);
@@ -58,7 +60,7 @@ public class AlgaeIntake extends SubsystemBase {
     algaePivotMotor.configure(algaePivotMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeRollerMotor.configure(alageRollerMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-
+    isThereAlgae = false;
   }
   public void SetAlgaeIntakePivotSpeed(double speed){
     algaePivotMotor.set(speed);
@@ -76,6 +78,13 @@ public class AlgaeIntake extends SubsystemBase {
     algaeRollerMotor.set(speed);
   }
 
+  public void setAlgaeBool(boolean ag){
+    isThereAlgae = ag;
+  }
+
+  public boolean doWeHaveAlgae(){
+    return isThereAlgae;
+  }
   /**
    * Example command factory method.
    *

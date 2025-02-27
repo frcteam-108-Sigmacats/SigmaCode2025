@@ -57,7 +57,7 @@ public final class Constants {
 
     public static final double kDrivingMotorReduction = (45.0 * 21) / (DriveMotorPinionTeeth * 15);
 // p0.9 i0.0 d0.0//
-    public static final double drivemotorP = 1.5;
+    public static final double drivemotorP = 0.8;
     public static final double drivemotorI = 0.0;
     public static final double drivemotorD = 0.0;
 // p1 i0 d0//
@@ -91,11 +91,11 @@ public final class Constants {
     public static final int algaePivotMotorCurrentLimit = 20; //Units in amps
     public static final int algaeRollerMotorCurrentLimit = 15; //Units in amps
 
-    public static final double algaeIntakePivotPosition = 42;
+    public static final double algaeIntakePivotPosition = 90;
     public static final double algaeRestPivotPosition = 0.0;
     public static final double algaeOuttakePivotPosition = 42;
 
-    public static final double algaeIntakeSpeed = 0.45;
+    public static final double algaeIntakeSpeed = 0.65;
     public static final double algaeRestSpeed = 0.0;
     public static final double algaeOuttakeSpeed = -0.3;
   }
@@ -116,6 +116,8 @@ public final class Constants {
     public static final double L2 = 1.1;
     public static final double L3 = 2.5;
     public static final double L4 = 5.1;
+    public static final double A1 = 0.6;//Get actual position for it 
+    public static final double A2 = 1.8;//Get actual position for it
     
   }
 public static final class CoralXAlgaeWristConstants{
@@ -144,9 +146,11 @@ public static final class CoralXAlgaeWristConstants{
   public static final double WristOuttakeVelocity = -2000;
 
   public static final double cxaMotorFeedVelocity = -4000;
+  public static final double cxaMotorAlgaeRemovalVelocity = -3000;
   public static final double coralHopperSpeed = 0.5;
 
   public static final double l4WristPosition = 30;
+  public static final double algaeRemovalWristPosition = 25;//Get the actual position for it
   public static final double restWristPosition = 0;
 }
 
@@ -182,6 +186,24 @@ public static final class VisionConstants{
     9, new Pose2d(new Translation2d(12.263, 5.134), Rotation2d.fromDegrees(-60)),
     10, new Pose2d(new Translation2d(11.700, 3.827), Rotation2d.fromDegrees(0)),
     11, new Pose2d(new Translation2d(12.515, 2.748), Rotation2d.fromDegrees(60))
+  );
+
+  public static final Map<Integer, Pose2d> algaeBluePoses= (Map<Integer, Pose2d>) 
+    Map.of(17, new Pose2d(new Translation2d(3.851, 2.923), Rotation2d.fromDegrees(60)), 
+    18, new Pose2d(new Translation2d(3.237, 4.025), Rotation2d.fromDegrees(0)),
+    19, new Pose2d(new Translation2d(3.861, 5.107), Rotation2d.fromDegrees(-60)),
+    20, new Pose2d(new Translation2d(5.109, 5.107), Rotation2d.fromDegrees(-120)),
+    21, new Pose2d(new Translation2d(5.753, 4.015), Rotation2d.fromDegrees(180)),
+    22, new Pose2d(new Translation2d(5.109, 2.943), Rotation2d.fromDegrees(120))
+  );
+
+  public static final Map<Integer, Pose2d> algaeRedPoses= (Map<Integer, Pose2d>) 
+    Map.of(6, new Pose2d(new Translation2d(13.670, 2.962), Rotation2d.fromDegrees(120)), 
+    7, new Pose2d(new Translation2d(14.313, 4.015), Rotation2d.fromDegrees(180)),
+    8, new Pose2d(new Translation2d(13.689, 5.127), Rotation2d.fromDegrees(-120)),
+    9, new Pose2d(new Translation2d(12.451, 5.107), Rotation2d.fromDegrees(-60)),
+    10, new Pose2d(new Translation2d(11.797, 4.015), Rotation2d.fromDegrees(0)),
+    11, new Pose2d(new Translation2d(12.451, 2.923), Rotation2d.fromDegrees(60))
   );
 }
 

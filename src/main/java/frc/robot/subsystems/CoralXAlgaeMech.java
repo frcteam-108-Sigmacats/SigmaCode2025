@@ -49,6 +49,8 @@ public class CoralXAlgaeMech extends SubsystemBase {
   private CANrange coralDetector;
 
   private CANrangeConfiguration coralDetectorConfig = new CANrangeConfiguration();
+
+  private boolean doWeHaveAlgae;
   /** Creates a new ExampleSubsystem. */
   public CoralXAlgaeMech() {
     cXAMotor = new TalonFX(CoralXAlgaeWristConstants.cXAMotorID);
@@ -94,6 +96,8 @@ public class CoralXAlgaeMech extends SubsystemBase {
     cXAMotor.getConfigurator().apply(cXAMotorConfig);
     coralHopperMotor.configure(coralHopperMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     coralAlgaeWristMotor.configure(coralAlgaeWristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    doWeHaveAlgae = false;
   }
 
   public void setWristPivot(double position){
@@ -122,6 +126,17 @@ public class CoralXAlgaeMech extends SubsystemBase {
 
   public void setCoralHopperMotorSpeed(double speed){
     coralHopperMotor.set(speed);
+  }
+
+  public double getCXAMotorCurrent(){
+    return cXAMotor.getTorqueCurrent().getValueAsDouble();
+  }
+
+  public void setAlgaeBool(boolean ag){
+    doWeHaveAlgae = ag;
+  }
+  public boolean doWeHaveAlgae(){
+    return doWeHaveAlgae;
   }
 
   /**
@@ -153,6 +168,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Is Coral Detected: ", getCoralDetection());
     SmartDashboard.putNumber("Wrist Angle", getWristPosition());
+    SmartDashboard.putNumber("CXA Motor Current: ", getCXAMotorCurrent());
   }
 
   @Override

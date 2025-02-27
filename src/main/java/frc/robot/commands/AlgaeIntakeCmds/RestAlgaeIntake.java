@@ -4,7 +4,9 @@
 
 package frc.robot.commands.AlgaeIntakeCmds;
 
+import edu.wpi.first.wpilibj.ADXL345_I2C.AllAxes;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.subsystems.AlgaeIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -12,6 +14,7 @@ public class RestAlgaeIntake extends Command {
   private AlgaeIntake algaeSub;
   private double position;
   private double speed;
+  private boolean isThereAlgae;
   /** Creates a new RestAlgaeIntake. */
   public RestAlgaeIntake(AlgaeIntake algaeSub, double position, double speed) {
     this.algaeSub = algaeSub;
@@ -23,13 +26,24 @@ public class RestAlgaeIntake extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    algaeSub.setAlgaeRollerSpeed(AlgaeIntakeConstants.algaeRestSpeed);
+    isThereAlgae = algaeSub.doWeHaveAlgae();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     algaeSub.setAlgaePivot(position);
-    algaeSub.setAlgaeRollerSpeed(speed);
+    if(isThereAlgae){
+      algaeSub.setAlgaeRollerSpeed(AlgaeIntakeConstants.algaeRestSpeed);
+      if(algaeSub.getAlgaeRollerCurrent() < 10){
+        isThereAlgae = false;
+      }
+    }
+    else{
+      algaeSub.setAlgaeRollerSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

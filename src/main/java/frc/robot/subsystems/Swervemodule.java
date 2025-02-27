@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
+import com.fasterxml.jackson.databind.Module.SetupContext;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -145,6 +146,10 @@ public class Swervemodule extends SubsystemBase {
     turnPIDcontroller.setReference(correctedDesiredState.angle.getRadians(),
     ControlType.kPosition);
     
+   }
+
+   public double getMotorVoltage(){
+    return drivemotor.getMotorVoltage().getValueAsDouble();
    }
   
   @Override

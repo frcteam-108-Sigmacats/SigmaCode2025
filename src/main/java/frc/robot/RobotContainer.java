@@ -6,12 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Drive;
-import frc.robot.commands.ElevatorRestCommand;
-import frc.robot.commands.SetReefLevel;
-import frc.robot.commands.SwervePoseGenerator;
-import frc.robot.commands.WristRestCommand;
-import frc.robot.commands.HumanStationFeeder;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Swervemodule;
 import frc.robot.subsystems.Vision;
@@ -25,7 +19,14 @@ import frc.robot.subsystems.AlgaeIntake;
 import frc.robot.commands.CXAWristCmds.TestCXAMotor;
 import frc.robot.commands.CXAWristCmds.TestCoralHopper;
 import frc.robot.commands.CXAWristCmds.TestWristPivot;
+import frc.robot.commands.CXAWristCmds.WristRestCommand;
+import frc.robot.commands.ControllerCmds.AlgaeRemovalCommand;
+import frc.robot.commands.ControllerCmds.Drive;
+import frc.robot.commands.ControllerCmds.HumanStationFeeder;
 import frc.robot.commands.ControllerCmds.ReefScore;
+import frc.robot.commands.ControllerCmds.SwervePoseGenerator;
+import frc.robot.commands.ElevatorCommands.ElevatorRestCommand;
+import frc.robot.commands.ElevatorCommands.SetReefLevel;
 import frc.robot.subsystems.CoralXAlgaeMech;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -54,7 +55,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private Trigger bX, bB, bA, bY, LT, RT, LB, RB, upPov;
+  private Trigger bX, bB, bA, bY, LT, RT, LB, RB, upPov, downPov;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -63,7 +64,7 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(new Drive(swerveDrive, m_driverController, fieldRelative));
     algaeSub.setDefaultCommand(new RestAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeRestPivotPosition, AlgaeIntakeConstants.algaeRestSpeed));
     cXASub.setDefaultCommand(new WristRestCommand(cXASub, elevatorSub));
-    elevatorSub.setDefaultCommand(new ElevatorRestCommand(elevatorSub, cXASub));
+    elevatorSub.setDefaultCommand(new ElevatorRestCommand(elevatorSub, cXASub, vision));
     // cXASub.setDefaultCommand(getAutonomousCommand());
     // Configure the trigger bindings
     configureBindings();
@@ -71,19 +72,23 @@ public class RobotContainer {
    // bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
    // bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
         // Configure the trigger bindings
-    bA.whileTrue(new ReefScore(elevatorSub, cXASub, false, 1));
-    bA.whileFalse(new ReefScore(elevatorSub, cXASub, true, 1));
-    bB.whileTrue(new ReefScore(elevatorSub, cXASub, false, 2));
-    bB.whileFalse(new ReefScore(elevatorSub, cXASub, true, 2));
-    bY.whileTrue(new ReefScore(elevatorSub, cXASub, false, 3));
-    bY.whileFalse(new ReefScore(elevatorSub, cXASub, true, 3));
-    bX.whileTrue(new ReefScore(elevatorSub, cXASub, false, 4));
-    bX.whileFalse(new ReefScore(elevatorSub, cXASub, true, 4));
+    bA.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L1"));
+    bA.whileFalse(new ReefScore(elevatorSub, cXASub, true, "L1"));
+    bB.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L2"));
+    bB.whileFalse(new ReefScore(elevatorSub, cXASub, true, "L2"));
+    bY.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L3"));
+    bY.whileFalse(new ReefScore(elevatorSub, cXASub, true, "L3"));
+    bX.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L4"));
+    bX.whileFalse(new ReefScore(elevatorSub, cXASub, true, "L4"));
     // LT.whileTrue(new ReefScore(elevatorSub, cXASub, false));
     // LT.whileFalse(new ReefScore(elevatorSub, cXASub, true));
     // RT.whileTrue(new HumanStationFeeder(cXASub, elevatorSub));
     RT.toggleOnTrue(new HumanStationFeeder(cXASub, elevatorSub));
-    upPov.onTrue(new InstantCommand(()-> swerveDrive.zeroHeading(DriverStation.getAlliance().get() == Alliance.Red ? Rotation2d.kPi : Rotation2d.kZero)));
+    // upPov.onTrue(new InstantCommand(()-> swerveDrive.zeroHeading(DriverStation.getAlliance().get() == Alliance.Red ? Rotation2d.kPi : Rotation2d.kZero)));
+    // upPov.whileTrue(new AlgaeRemovalCommand(elevatorSub, cXASub, "A2"));
+    // downPov.whileTrue(new AlgaeRemovalCommand(elevatorSub, cXASub, "A1"));
+    upPov.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));
+    downPov.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
     LB.whileTrue(new SwervePoseGenerator(swerveDrive, vision, true));
     RB.whileTrue(new SwervePoseGenerator(swerveDrive, vision, false));
 
@@ -112,6 +117,7 @@ public class RobotContainer {
    LB = m_driverController.leftBumper();
    RB = m_driverController.rightBumper();
    upPov = m_driverController.povUp();
+   downPov = m_driverController.povDown();
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     

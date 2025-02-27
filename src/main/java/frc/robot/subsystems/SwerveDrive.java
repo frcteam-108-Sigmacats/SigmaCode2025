@@ -248,6 +248,10 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Robot Target Pose X: ", getTargetPose().getX());
     SmartDashboard.putNumber("Robot Target Pose Y: ", getTargetPose().getY());
     SmartDashboard.putNumber("Robot Target Pose Rotation: ", getTargetPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Front Left Drive Output: ", fLeftModule.getMotorVoltage());
+    SmartDashboard.putNumber("Front Right Drive Output: ", fRightModule.getMotorVoltage());
+    SmartDashboard.putNumber("Back Left Drive Output: ", bLeftModule.getMotorVoltage());
+    SmartDashboard.putNumber("Back Right Drive Output: ", bRightModule.getMotorVoltage());
     if(vision.istheretagLeftLL()){
       swerveDrivePoseEstimator.addVisionMeasurement(vision.getLeftLLBotPose().pose, vision.getLeftLLBotPose().timestampSeconds);
     }

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.CXAWristCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.CoralXAlgaeWristConstants;
@@ -11,35 +11,50 @@ import frc.robot.subsystems.CoralXAlgaeMech;
 import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class WristRestCommand extends Command {
+public class CXAWristAlgaeRemoval extends Command {
   private CoralXAlgaeMech cxaMech;
-  private Elevator elevatorSub;
-  /** Creates a new WristRestCommand. */
-  public WristRestCommand(CoralXAlgaeMech cxaMech, Elevator elevatorSub) {
+  private Elevator elevator;
+  private int counter;
+  private String level;
+  /** Creates a new CXAWristAlgaeRemoval. */
+  public CXAWristAlgaeRemoval(CoralXAlgaeMech cxaMech, Elevator elevator, String level) {
     this.cxaMech = cxaMech;
-    this.elevatorSub = elevatorSub;
+    this.elevator = elevator;
+    this.level = level;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(cxaMech);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(Math.abs(CoralXAlgaeWristConstants.l4WristPosition - cxaMech.getWristPosition()) <= 5){
-    //   if(Math.abs(0 - elevatorSub.getElevatorPosition()) <= 0.2){
-    //     cxaMech.setWristPivot(0);
-    //   }
-    // }
-    // else{
-    //   cxaMech.setWristPivot(0);
-    // }
-    cxaMech.setWristPivot(0);
-    cxaMech.setCXAVelocity(0);
-    cxaMech.setCoralHopperMotorSpeed(0);
+    counter++;
+    cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorAlgaeRemovalVelocity);
+    if(level == "A1"){
+      if(Math.abs(Elevatorconstants.A1 - elevator.getElevatorPosition()) <= 0.2){
+        cxaMech.setWristPivot(CoralXAlgaeWristConstants.algaeRemovalWristPosition);
+      }
+    }
+    else{
+      if(Math.abs(Elevatorconstants.A2 - elevator.getElevatorPosition()) <= 0.2){
+        cxaMech.setWristPivot(CoralXAlgaeWristConstants.algaeRemovalWristPosition);
+      }
+    }
+    if(counter >= 25){
+      if(Math.abs(cxaMech.getCXAMotorCurrent()) > 35){
+        cxaMech.setAlgaeBool(true);
+      }
+    }
+
+    if(cxaMech.doWeHaveAlgae()){
+      cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
+    }
   }
 
   // Called once the command ends or is interrupted.

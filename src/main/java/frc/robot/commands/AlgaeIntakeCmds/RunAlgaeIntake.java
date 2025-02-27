@@ -12,6 +12,7 @@ public class RunAlgaeIntake extends Command {
   private AlgaeIntake algaeSub;
   private double position;
   private double speed;
+  private int counter;
   /** Creates a new RunAlgaeIntake. */
   private boolean isFinished;
   public RunAlgaeIntake(AlgaeIntake algaeSub, double position, double speed) {
@@ -26,6 +27,7 @@ public class RunAlgaeIntake extends Command {
   @Override
   public void initialize() {
     isFinished = false;
+    counter = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,8 +35,12 @@ public class RunAlgaeIntake extends Command {
   public void execute() {
     algaeSub.setAlgaePivot(position);
     algaeSub.setAlgaeRollerSpeed(speed);
-    if(algaeSub.getAlgaeRollerCurrent() > 10){
-      isFinished = true;
+    counter++;
+    if(counter>= 25){
+      if(algaeSub.getAlgaeRollerCurrent() > 15){
+        algaeSub.setAlgaeBool(true);
+        isFinished = true;
+      }
     }
   }
 
