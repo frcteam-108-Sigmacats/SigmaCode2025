@@ -34,16 +34,17 @@ public class CXAWristHumanStationFeeder extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    cxaMech.setWristPivot(0);
+    cxaMech.setWristPivot(358.5);
     if(!isCoralThere){
       cxaMech.setCoralHopperMotorSpeed(CoralXAlgaeWristConstants.coralHopperSpeed);
       cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
     }
     else{
       cxaMech.setCoralHopperMotorSpeed(0.2);
-      cxaMech.setCXAVelocity(-1500);
+      cxaMech.setCXAVelocity(-850);
     }
-    if(counter >= 25 && !cxaMech.getCoralDetection()){
+    if(counter >= 40 && !cxaMech.getCoralDetection()){
+      cxaMech.setWristPivot(0);
       isFinished = true;
     }
     if(cxaMech.getCoralDetection()){

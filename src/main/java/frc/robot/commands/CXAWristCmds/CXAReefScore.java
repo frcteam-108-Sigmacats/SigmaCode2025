@@ -54,7 +54,7 @@ public class CXAReefScore extends Command {
     else{
       cxaMech.setCXAVelocity(0);
     }
-    if(counter >= 25){
+    if(counter >= 15){
       isFinished = true;
     }
   }

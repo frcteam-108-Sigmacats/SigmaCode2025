@@ -137,7 +137,7 @@ public static final class CoralXAlgaeWristConstants{
   public static final double velocityD = 0.0;
 
   public static final int coralMotorCurrentLimit = 40;
-  public static final int coralHopperMotorCurrentLimit = 20;
+  public static final int coralHopperMotorCurrentLimit = 35;
   public static final int coralAlgaeWristCurrentLimit = 20;
 
   public static final double forwardSoftLimitWrist = 0.0;
@@ -147,7 +147,7 @@ public static final class CoralXAlgaeWristConstants{
 
   public static final double cxaMotorFeedVelocity = -4000;
   public static final double cxaMotorAlgaeRemovalVelocity = -3000;
-  public static final double coralHopperSpeed = 0.5;
+  public static final double coralHopperSpeed = 1.0;
 
   public static final double l4WristPosition = 30;
   public static final double algaeRemovalWristPosition = 25;//Get the actual position for it

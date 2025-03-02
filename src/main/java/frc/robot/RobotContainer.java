@@ -85,10 +85,10 @@ public class RobotContainer {
     // RT.whileTrue(new HumanStationFeeder(cXASub, elevatorSub));
     RT.toggleOnTrue(new HumanStationFeeder(cXASub, elevatorSub));
     // upPov.onTrue(new InstantCommand(()-> swerveDrive.zeroHeading(DriverStation.getAlliance().get() == Alliance.Red ? Rotation2d.kPi : Rotation2d.kZero)));
-    // upPov.whileTrue(new AlgaeRemovalCommand(elevatorSub, cXASub, "A2"));
-    // downPov.whileTrue(new AlgaeRemovalCommand(elevatorSub, cXASub, "A1"));
-    upPov.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));
-    downPov.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
+    upPov.whileTrue(new AlgaeRemovalCommand(elevatorSub, cXASub, "A2"));
+    downPov.whileTrue(new AlgaeRemovalCommand(elevatorSub, cXASub, "A1"));
+    // upPov.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));
+    // downPov.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
     LB.whileTrue(new SwervePoseGenerator(swerveDrive, vision, true));
     RB.whileTrue(new SwervePoseGenerator(swerveDrive, vision, false));
 

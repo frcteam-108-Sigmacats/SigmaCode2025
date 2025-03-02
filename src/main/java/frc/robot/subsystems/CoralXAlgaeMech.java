@@ -60,6 +60,12 @@ public class CoralXAlgaeMech extends SubsystemBase {
     coralAlgaeWristMotor = new SparkFlex(CoralXAlgaeWristConstants.coralXAlgaeWristID, MotorType.kBrushless);
 
     coralDetector = new CANrange(CoralXAlgaeWristConstants.coralDetectorID);
+    coralDetector.getConfigurator().apply(new CANrangeConfiguration());
+
+    coralDetectorConfig.FovParams.FOVRangeY = 11;
+    coralDetectorConfig.FovParams.FOVRangeX = 11;
+    coralDetectorConfig.FovParams.FOVCenterY = 10;
+    coralDetectorConfig.ProximityParams.ProximityThreshold = 0.12;
 
     cXAMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     cXAMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -96,6 +102,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
     cXAMotor.getConfigurator().apply(cXAMotorConfig);
     coralHopperMotor.configure(coralHopperMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     coralAlgaeWristMotor.configure(coralAlgaeWristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    coralDetector.getConfigurator().apply(coralDetectorConfig);
 
     doWeHaveAlgae = false;
   }
