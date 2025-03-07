@@ -53,13 +53,13 @@ public class CoralXAlgaeMech extends SubsystemBase {
   private boolean doWeHaveAlgae;
   /** Creates a new ExampleSubsystem. */
   public CoralXAlgaeMech() {
-    cXAMotor = new TalonFX(CoralXAlgaeWristConstants.cXAMotorID);
+    cXAMotor = new TalonFX(CoralXAlgaeWristConstants.cXAMotorID, "*");
     cXAMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     coralHopperMotor = new SparkMax(CoralXAlgaeWristConstants.coralHopperMotorID, MotorType.kBrushless);
     coralAlgaeWristMotor = new SparkFlex(CoralXAlgaeWristConstants.coralXAlgaeWristID, MotorType.kBrushless);
 
-    coralDetector = new CANrange(CoralXAlgaeWristConstants.coralDetectorID);
+    coralDetector = new CANrange(CoralXAlgaeWristConstants.coralDetectorID, "*");
     coralDetector.getConfigurator().apply(new CANrangeConfiguration());
 
     coralDetectorConfig.FovParams.FOVRangeY = 11;
@@ -76,6 +76,14 @@ public class CoralXAlgaeMech extends SubsystemBase {
 
     coralHopperMotorConfig.idleMode(IdleMode.kCoast);
     coralHopperMotorConfig.smartCurrentLimit(CoralXAlgaeWristConstants.coralHopperMotorCurrentLimit);
+
+    coralHopperMotorConfig.signals.absoluteEncoderPositionAlwaysOn(false);
+    coralHopperMotorConfig.signals.absoluteEncoderVelocityAlwaysOn(false);
+    coralHopperMotorConfig.signals.analogPositionAlwaysOn(false);
+    coralHopperMotorConfig.signals.externalOrAltEncoderPositionAlwaysOn(false);
+    coralHopperMotorConfig.signals.externalOrAltEncoderVelocityAlwaysOn(false);
+    coralHopperMotorConfig.signals.iAccumulationAlwaysOn(false);
+    coralHopperMotorConfig.signals.primaryEncoderPositionAlwaysOn(false);
     
     coralAlgaeWristMotorConfig.idleMode(IdleMode.kBrake);
     coralAlgaeWristMotorConfig.smartCurrentLimit(CoralXAlgaeWristConstants.coralAlgaeWristCurrentLimit);
@@ -94,6 +102,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
     coralAlgaeWristMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     coralAlgaeWristMotorConfig.closedLoop.positionWrappingEnabled(true);
     coralAlgaeWristMotorConfig.closedLoop.positionWrappingInputRange(0, 360);
+    
 
     wristPIDController = coralAlgaeWristMotor.getClosedLoopController();
     pivotAbsEncoder = coralAlgaeWristMotor.getAbsoluteEncoder();

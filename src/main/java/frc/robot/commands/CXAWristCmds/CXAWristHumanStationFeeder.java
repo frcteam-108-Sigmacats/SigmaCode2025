@@ -43,8 +43,7 @@ public class CXAWristHumanStationFeeder extends Command {
       cxaMech.setCoralHopperMotorSpeed(0.2);
       cxaMech.setCXAVelocity(-850);
     }
-    if(counter >= 40 && !cxaMech.getCoralDetection()){
-      cxaMech.setWristPivot(0);
+    if(counter >= 25 && !cxaMech.getCoralDetection()){
       isFinished = true;
     }
     if(cxaMech.getCoralDetection()){

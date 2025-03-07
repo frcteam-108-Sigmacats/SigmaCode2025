@@ -51,7 +51,7 @@ public class SwerveDrive extends SubsystemBase {
 
   private boolean isBlueAlliance;
 
-  private Pigeon2 gyro = new Pigeon2(1);
+  private Pigeon2 gyro = new Pigeon2(1, "*");
 
   private Field2d field = new Field2d();
   private Vision vision = new Vision();
@@ -87,7 +87,7 @@ public class SwerveDrive extends SubsystemBase {
       this::resetEstimator, 
       this::getSpeeds, 
       this::driveRobotRelative, 
-      new PPHolonomicDriveController(new PIDConstants(3.0,0.0,0.0), new PIDConstants(3.0,0.0,0.0)), 
+      new PPHolonomicDriveController(new PIDConstants(5.0,0.0,0.0), new PIDConstants(5.0,0.0,0.0)), 
       config, 
       () -> {
         var alliance = DriverStation.getAlliance();
@@ -252,10 +252,10 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Front Right Drive Output: ", fRightModule.getMotorVoltage());
     SmartDashboard.putNumber("Back Left Drive Output: ", bLeftModule.getMotorVoltage());
     SmartDashboard.putNumber("Back Right Drive Output: ", bRightModule.getMotorVoltage());
-    if(vision.istheretagLeftLL()){
+    if(vision.istheretagLeftLL() && gyro.getAngularVelocityZDevice().getValueAsDouble() < 720){
       swerveDrivePoseEstimator.addVisionMeasurement(vision.getLeftLLBotPose().pose, vision.getLeftLLBotPose().timestampSeconds);
     }
-    if(vision.istheretagRightLL()){
+    if(vision.istheretagRightLL() && gyro.getAngularVelocityZDevice().getValueAsDouble() < 720){
       swerveDrivePoseEstimator.addVisionMeasurement(vision.getRightLLBotPose().pose, vision.getRightLLBotPose().timestampSeconds);
     }
   }

@@ -15,12 +15,15 @@ import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SwervePosePID extends Command {
-  private PIDController pidController = new PIDController(1.0, 0, 0);
+  private PIDController xpidController = new PIDController(0.03, 0, 0);
+  private PIDController ypidController = new PIDController(0.1, 0, 0);
+
   private SwerveDrive swerveSub;
   private Vision visionSub;
   private Translation2d translation = new Translation2d();
   private boolean left;
   private Pose2d target;
+  private double xVal, yVal;
   /** Creates a new SwervePosePID. */
   public SwervePosePID(SwerveDrive swerveSub, Vision visionSub, boolean left) {
     this.swerveSub = swerveSub;
@@ -34,15 +37,26 @@ public class SwervePosePID extends Command {
   @Override
   public void initialize() {
     target = swerveSub.getTargetPose();
-    pidController.setTolerance(0.2);
+    xpidController.setTolerance(0.1);
+    ypidController.setTolerance(0.4);
+    xVal = 0;
+    yVal = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      double distance = Math.sqrt(Math.pow(target.getX() - swerveSub.getPose().getX(), 2) + Math.pow(target.getY() - swerveSub.getPose().getY(),2));
-      double speed = pidController.calculate(distance);
-      translation = new Translation2d(speed, speed);
+      if(left){
+        xVal = -xpidController.calculate(visionSub.getRightLLTX(), -11);
+        yVal = ypidController.calculate(visionSub.getRightLLTY());
+      }
+      else{
+        xVal = xpidController.calculate(visionSub.getLeftLLTX(), 5);
+        yVal = ypidController.calculate(visionSub.getLeftLLTY());
+      }
+      System.out.println("X Value " + xVal);
+      System.out.println("Y Value " + yVal);
+      translation = new Translation2d(xVal, yVal);
       swerveSub.drive(translation, 0, false);
   }
 
@@ -53,6 +67,10 @@ public class SwervePosePID extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(Math.abs(xVal) <= 1 && Math.abs(yVal) <= 1){
+      System.out.println("Finished PID");
+      return true;
+    }
     return false;
   }
 }

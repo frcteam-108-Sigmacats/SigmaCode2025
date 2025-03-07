@@ -137,7 +137,7 @@ public static final class CoralXAlgaeWristConstants{
   public static final double velocityD = 0.0;
 
   public static final int coralMotorCurrentLimit = 40;
-  public static final int coralHopperMotorCurrentLimit = 35;
+  public static final int coralHopperMotorCurrentLimit = 40;
   public static final int coralAlgaeWristCurrentLimit = 20;
 
   public static final double forwardSoftLimitWrist = 0.0;

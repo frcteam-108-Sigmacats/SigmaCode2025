@@ -26,13 +26,13 @@ public class TestWristPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    cXASub.setWristPivot(position);
+    // cXASub.setWristPivot(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cXASub.setWristPivot(0);
+    // cXASub.setWristPivot(0);
   }
 
   // Returns true when the command should end.

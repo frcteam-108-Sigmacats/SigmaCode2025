@@ -57,7 +57,7 @@ public class Swervemodule extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public Swervemodule(int drivemotorID, int turnmotorID, double angleOffset ) {
-    drivemotor = new TalonFX(drivemotorID);
+    drivemotor = new TalonFX(drivemotorID, "*");
     turnmotor = new SparkMax(turnmotorID,MotorType.kBrushless);
 
     drivemotor.getConfigurator().apply(new TalonFXConfiguration());

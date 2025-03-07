@@ -45,8 +45,8 @@ private Translation2d translation;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double yAxis = m_driverController.getLeftY();
-    double xAxis = m_driverController.getLeftX();
+    double yAxis = -m_driverController.getLeftY();
+    double xAxis = -m_driverController.getLeftX();
     double rotAxis = -m_driverController.getRightX();
 // y=0 x=0.0//
     yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis * 2.5));

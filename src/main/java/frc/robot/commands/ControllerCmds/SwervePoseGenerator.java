@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SetTargetPose;
+import frc.robot.commands.SwervePosePID;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Vision;
 
@@ -29,6 +30,6 @@ public class SwervePoseGenerator extends SequentialCommandGroup {
       Commands.defer(() -> {
         return AutoBuilder.pathfindToPose(swerveSub.getTargetPose(), 
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720)));
-      }, Set.of(swerveSub)) );
+      }, Set.of(swerveSub)), new SwervePosePID(swerveSub, visionSub, left) );
   }
 }

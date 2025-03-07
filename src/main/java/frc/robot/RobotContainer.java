@@ -95,7 +95,7 @@ public class RobotContainer {
     /*bA.whileTrue(new TestWristPivot(cXASub, 0));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
     bY.whileTrue(new TestCoralHopper(cXASub, 0));*/
-  }
+  } 
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
