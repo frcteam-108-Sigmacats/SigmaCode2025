@@ -91,12 +91,12 @@ public final class Constants {
     public static final int algaePivotMotorCurrentLimit = 20; //Units in amps
     public static final int algaeRollerMotorCurrentLimit = 15; //Units in amps
 
-    public static final double algaeIntakePivotPosition = 90;
+    public static final double algaeIntakePivotPosition = 95;
     public static final double algaeRestPivotPosition = 0.0;
     public static final double algaeOuttakePivotPosition = 42;
 
-    public static final double algaeIntakeSpeed = 0.65;
-    public static final double algaeRestSpeed = 0.0;
+    public static final double algaeIntakeSpeed = 0.80;
+    public static final double algaeRestSpeed = 0.5;
     public static final double algaeOuttakeSpeed = -0.3;
   }
   public static class Elevatorconstants{
@@ -106,9 +106,9 @@ public final class Constants {
       
     public static final int ElevatorMotorCurrentlimit = 40;
 
-    public static final double piviotP = 1.5;
+    public static final double piviotP = 1.0;
     public static final double piviotI = 0.0;
-    public static final double piviotD = 0.01;
+    public static final double piviotD = 0.0;
   
     public static final double elevatorForwardSoftLimit = 5.2;/*change when robo done */
     public static final double elevatorReverseSoftLimit = 0;
@@ -137,7 +137,7 @@ public static final class CoralXAlgaeWristConstants{
   public static final double velocityD = 0.0;
 
   public static final int coralMotorCurrentLimit = 40;
-  public static final int coralHopperMotorCurrentLimit = 40;
+  public static final int coralHopperMotorCurrentLimit = 45;
   public static final int coralAlgaeWristCurrentLimit = 20;
 
   public static final double forwardSoftLimitWrist = 0.0;

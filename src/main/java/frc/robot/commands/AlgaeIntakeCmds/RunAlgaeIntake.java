@@ -35,19 +35,19 @@ public class RunAlgaeIntake extends Command {
   public void execute() {
     algaeSub.setAlgaePivot(position);
     algaeSub.setAlgaeRollerSpeed(speed);
-    counter++;
-    if(counter>= 25){
       if(algaeSub.getAlgaeRollerCurrent() > 15){
         algaeSub.setAlgaeBool(true);
+        counter++;
+      }
+      if(counter>= 50){
         isFinished = true;
       }
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeSub.setAlgaeRollerSpeed(0);
+    
   }
 
   // Returns true when the command should end.

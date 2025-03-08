@@ -27,7 +27,6 @@ public class RestAlgaeIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algaeSub.setAlgaeRollerSpeed(AlgaeIntakeConstants.algaeRestSpeed);
     isThereAlgae = algaeSub.doWeHaveAlgae();
   }
 
@@ -37,12 +36,12 @@ public class RestAlgaeIntake extends Command {
     algaeSub.setAlgaePivot(position);
     if(isThereAlgae){
       algaeSub.setAlgaeRollerSpeed(AlgaeIntakeConstants.algaeRestSpeed);
-      if(algaeSub.getAlgaeRollerCurrent() < 10){
+      if(algaeSub.getAlgaeRollerCurrent() < 6){
         isThereAlgae = false;
       }
     }
     else{
-      algaeSub.setAlgaeRollerSpeed(0);
+      algaeSub.setAlgaeRollerSpeed(0.0);
     }
   }
 

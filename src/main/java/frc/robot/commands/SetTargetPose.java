@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -32,54 +34,61 @@ public class SetTargetPose extends InstantCommand {
     Pose2d targetPose;
     if(swerveSub.getAllianceColor()){
       if(left){
-        if(visionSub.istheretagRightLL()){
-          targetPose = VisionConstants.leftBluePoses.get((int) visionSub.getLeftLLTagID());
-        }
-        else if(visionSub.istheretagLeftLL()){
-          targetPose = VisionConstants.leftBluePoses.get((int) visionSub.getRightLLTagID());
-        }
-        else{
-          targetPose = new Pose2d();
-        }
+        // if(visionSub.istheretagRightLL()){
+        //   targetPose = VisionConstants.leftBluePoses.get((int) visionSub.getLeftLLTagID());
+        // }
+        // else if(visionSub.istheretagLeftLL()){
+        //   targetPose = VisionConstants.leftBluePoses.get((int) visionSub.getRightLLTagID());
+        // }
+        // else{
+        //   targetPose = new Pose2d();
+        // }
+        List<Pose2d> leftBluePoses = List.copyOf(VisionConstants.leftBluePoses.values());
+        targetPose = swerveSub.getPose().nearest(leftBluePoses);
         
       }
       else{
-        if(visionSub.istheretagLeftLL()){
-          targetPose = VisionConstants.rightBluePoses.get((int) visionSub.getLeftLLTagID());
-        }
-        else if(visionSub.istheretagRightLL()){
-          targetPose = VisionConstants.rightBluePoses.get((int) visionSub.getRightLLTagID());
-        }
-        else{
-          targetPose = new Pose2d();
-        }
+        // if(visionSub.istheretagLeftLL()){
+        //   targetPose = VisionConstants.rightBluePoses.get((int) visionSub.getLeftLLTagID());
+        // }
+        // else if(visionSub.istheretagRightLL()){
+        //   targetPose = VisionConstants.rightBluePoses.get((int) visionSub.getRightLLTagID());
+        // }
+        // else{
+        //   targetPose = new Pose2d();
+        // }
+        List<Pose2d> rightBluePoses = List.copyOf(VisionConstants.rightBluePoses.values());
+        targetPose = swerveSub.getPose().nearest(rightBluePoses);
         
       }
     }
     else{
       if(left){
-        if(visionSub.istheretagLeftLL()){
-          targetPose = VisionConstants.leftRedPoses.get((int) visionSub.getLeftLLTagID());
-        }
-        else if(visionSub.istheretagRightLL()){
-          targetPose = VisionConstants.leftRedPoses.get((int) visionSub.getRightLLTagID());
-        }
-        else{
-          targetPose = new Pose2d();
-        }
+        // if(visionSub.istheretagLeftLL()){
+        //   targetPose = VisionConstants.leftRedPoses.get((int) visionSub.getLeftLLTagID());
+        // }
+        // else if(visionSub.istheretagRightLL()){
+        //   targetPose = VisionConstants.leftRedPoses.get((int) visionSub.getRightLLTagID());
+        // }
+        // else{
+        //   targetPose = new Pose2d();
+        // }
+        List<Pose2d> leftRedPoses = List.copyOf(VisionConstants.leftRedPoses.values());
+        targetPose = swerveSub.getPose().nearest(leftRedPoses);
         
       }
       else{
-        if(visionSub.istheretagLeftLL()){
-          targetPose = VisionConstants.rightRedPoses.get((int) visionSub.getLeftLLTagID());
-        }
-        else if(visionSub.istheretagRightLL()){
-          targetPose = VisionConstants.rightRedPoses.get((int) visionSub.getRightLLTagID());
-        }
-        else{
-          targetPose = new Pose2d();
-        }
-        
+        // if(visionSub.istheretagLeftLL()){
+        //   targetPose = VisionConstants.rightRedPoses.get((int) visionSub.getLeftLLTagID());
+        // }
+        // else if(visionSub.istheretagRightLL()){
+        //   targetPose = VisionConstants.rightRedPoses.get((int) visionSub.getRightLLTagID());
+        // }
+        // else{
+        //   targetPose = new Pose2d();
+        // }
+        List<Pose2d> rightRedPoses = List.copyOf(VisionConstants.rightRedPoses.values());
+        targetPose = swerveSub.getPose().nearest(rightRedPoses);
       }
     }
 

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -50,7 +52,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
 
   private CANrangeConfiguration coralDetectorConfig = new CANrangeConfiguration();
 
-  private boolean doWeHaveAlgae;
+  private BooleanSupplier doWeHaveAlgae;
   /** Creates a new ExampleSubsystem. */
   public CoralXAlgaeMech() {
     cXAMotor = new TalonFX(CoralXAlgaeWristConstants.cXAMotorID, "*");
@@ -113,7 +115,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
     coralAlgaeWristMotor.configure(coralAlgaeWristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     coralDetector.getConfigurator().apply(coralDetectorConfig);
 
-    doWeHaveAlgae = false;
+    doWeHaveAlgae = () -> false;
   }
 
   public void setWristPivot(double position){
@@ -149,9 +151,9 @@ public class CoralXAlgaeMech extends SubsystemBase {
   }
 
   public void setAlgaeBool(boolean ag){
-    doWeHaveAlgae = ag;
+    doWeHaveAlgae = ()-> ag;
   }
-  public boolean doWeHaveAlgae(){
+  public BooleanSupplier doWeHaveAlgae(){
     return doWeHaveAlgae;
   }
 
