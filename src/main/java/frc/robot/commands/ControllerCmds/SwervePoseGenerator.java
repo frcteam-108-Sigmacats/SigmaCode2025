@@ -29,7 +29,7 @@ public class SwervePoseGenerator extends SequentialCommandGroup {
       new SetTargetPose(swerveSub, visionSub, left), 
       Commands.defer(() -> {
         return AutoBuilder.pathfindToPose(swerveSub.getTargetPose(), 
-        new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720)));
+        new PathConstraints(5.0, 6.0, Units.degreesToRadians(540), Units.degreesToRadians(720)));
       }, Set.of(swerveSub)), new SwervePosePID(swerveSub, visionSub, left) );
   }
 }

@@ -19,6 +19,7 @@ public class CXAReefScore extends Command {
   private int counter;
   private boolean isFinished;
   private String level;
+  private boolean isThereAlgae;
   /** Creates a new CXAReefScore. */
   public CXAReefScore(CoralXAlgaeMech cxaMech, Elevator elevatorSub, boolean readyToExecute, String level) {
     this.cxaMech = cxaMech;
@@ -34,27 +35,47 @@ public class CXAReefScore extends Command {
   public void initialize() {
     counter = 0;
     isFinished = false;
+    isThereAlgae = cxaMech.doWeHaveAlgae();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(level == "L4"){
-      if(Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.1)
-      cxaMech.setWristPivot(CoralXAlgaeWristConstants.l4WristPosition);
+      if(!isThereAlgae){
+        if(Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.1){
+          cxaMech.setWristPivot(CoralXAlgaeWristConstants.l4WristPosition);
+        }
+      }
+      else{
+        if(Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.1){
+          cxaMech.setWristPivot(340);
+        }
+      }
     }
     else{
       cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
     }
     if(readyToExecute){
-      cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
+      if(!isThereAlgae){
+        if(Math.abs(CoralXAlgaeWristConstants.l4WristPosition - cxaMech.getWristPosition()) <= 5 && Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.2)
+          cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
+      }
+      else{
+        cxaMech.setCXAVelocity(6000);
+      }
       counter++;
-      System.out.println("Counter: "+ counter );
     }
     else{
-      cxaMech.setCXAVelocity(0);
+      if(!isThereAlgae){
+        cxaMech.setCXAVelocity(0);
+      }
+      else{
+        cxaMech.setCXAVelocity(-1000);
+      }
     }
     if(counter >= 25){
+      cxaMech.setCoralInside(false);
       isFinished = true;
     }
   }

@@ -41,7 +41,7 @@ public class WristRestCommand extends Command {
     //   cxaMech.setWristPivot(0);
     // }
     cxaMech.setWristPivot(0);
-    if(cxaMech.doWeHaveAlgae().getAsBoolean()){
+    if(cxaMech.doWeHaveAlgae()){
       cxaMech.setCXAVelocity(-1000);
       if(Math.abs(cxaMech.getCXAMotorCurrent()) < 10){
         cxaMech.setAlgaeBool(false);

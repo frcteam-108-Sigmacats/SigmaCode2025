@@ -9,14 +9,15 @@ import frc.robot.Constants.CoralXAlgaeWristConstants;
 import frc.robot.subsystems.CoralXAlgaeMech;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CXAWristHumanStationFeeder extends Command {
+public class CXAWristHumanStationFeederAuto extends Command {
   private CoralXAlgaeMech cxaMech;
   private boolean isFinished;
   private boolean isCoralThere;
   private boolean startCounter; 
   private int counter;
-  /** Creates a new CXAWristHumanStationFeeder. */
-  public CXAWristHumanStationFeeder(CoralXAlgaeMech cxaMech) {
+  private boolean coralInside;
+  /** Creates a new CXAWirstHumanStationFeederAuto. */
+  public CXAWristHumanStationFeederAuto(CoralXAlgaeMech cxaMech) {
     this.cxaMech = cxaMech;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(cxaMech);
@@ -25,8 +26,9 @@ public class CXAWristHumanStationFeeder extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isFinished = cxaMech.isThereCoral();
+    coralInside = cxaMech.isThereCoral();
     isCoralThere = false;
+    isFinished = false;
     counter = 0;
     startCounter = false;
   }
@@ -44,7 +46,6 @@ public class CXAWristHumanStationFeeder extends Command {
       cxaMech.setCXAVelocity(-850);
     }
     if(counter >= 25 && !cxaMech.getCoralDetection()){
-      cxaMech.setCoralInside(true);
       isFinished = true;
     }
     if(cxaMech.getCoralDetection()){
@@ -60,12 +61,15 @@ public class CXAWristHumanStationFeeder extends Command {
   @Override
   public void end(boolean interrupted) {
     cxaMech.setCXAVelocity(0);
-    cxaMech.setCoralHopperMotorSpeed(0);
+    cxaMech.setCoralHopperMotorSpeed(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(isFinished){
+      System.out.println("Auto Feeder Done");
+    }
     return isFinished;
   }
 }

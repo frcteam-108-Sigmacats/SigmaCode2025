@@ -70,6 +70,7 @@ public final class Constants {
     public static double trackWidth = Units.inchesToMeters(22.4375);
     public static double wheelbase = Units.inchesToMeters(22.4375);
     public static double kMaxSpeedMPS = 21;
+    public static double kSlowSpeedMPS = 2;
     public final static double maxAngularspeed = 4 * Math.PI;
     public static boolean gyroReversed = false;
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
@@ -83,20 +84,23 @@ public final class Constants {
   public static class AlgaeIntakeConstants{
     public static final int algaePivotMotorID = 9;
     public static final int algaeRollerMotorID = 10;
+    public static final int algaeClimbMotorID = 16;
 
-    public static final double pivotP = 0.01;
+    public static final double pivotP = 0.007;
     public static final double pivotI = 0.0;
     public static final double pivotD = 0.0;
 
     public static final int algaePivotMotorCurrentLimit = 20; //Units in amps
     public static final int algaeRollerMotorCurrentLimit = 15; //Units in amps
+    public static final int algaeClimbMotorCurrentLimit = 40;//Units in amps
 
     public static final double algaeIntakePivotPosition = 95;
+    public static final double algaeClimbPrimePosition = 135;
     public static final double algaeRestPivotPosition = 0.0;
     public static final double algaeOuttakePivotPosition = 42;
 
     public static final double algaeIntakeSpeed = 0.80;
-    public static final double algaeRestSpeed = 0.5;
+    public static final double algaeRestSpeed = 0.0;
     public static final double algaeOuttakeSpeed = -0.3;
   }
   public static class Elevatorconstants{
@@ -110,7 +114,7 @@ public final class Constants {
     public static final double piviotI = 0.0;
     public static final double piviotD = 0.0;
   
-    public static final double elevatorForwardSoftLimit = 5.2;/*change when robo done */
+    public static final double elevatorForwardSoftLimit = 5.3;/*change when robo done */
     public static final double elevatorReverseSoftLimit = 0;
     public static final double L1 = 0.0;
     public static final double L2 = 1.1;

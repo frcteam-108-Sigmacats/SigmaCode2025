@@ -8,14 +8,18 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.Elevatorconstants;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveDrive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Drive extends Command {
   private final SwerveDrive swerve;
 
-private Translation2d translation;
+  private Elevator elevatorSub;
+
+  private Translation2d translation;
 
   private double rotation;
 
@@ -30,10 +34,11 @@ private Translation2d translation;
 
 
   /** Creates a new Drive. */
-  public Drive(SwerveDrive swerve, CommandXboxController driver, boolean fieldRelative) {
+  public Drive(SwerveDrive swerve, Elevator elevatorSub, CommandXboxController driver, boolean fieldRelative) {
     this.swerve = swerve;
     m_driverController = driver;
     this.fieldRelative = fieldRelative;
+    this.elevatorSub = elevatorSub;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
   }
@@ -49,14 +54,27 @@ private Translation2d translation;
     double xAxis = -m_driverController.getLeftX();
     double rotAxis = -m_driverController.getRightX();
 // y=0 x=0.0//
-    yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis * 2.5));
-    xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.0 : (xAxis * 2.5));
-    rotAxis = (Math.abs(rotAxis) < SwerveDriveConstants.deadband ? 0 : (rotAxis * 10));
+    if(elevatorSub.getElevatorPosition() > Elevatorconstants.L2){
+      yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis));
+      xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.0 : (xAxis));
+      rotAxis = (Math.abs(rotAxis) < SwerveDriveConstants.deadband ? 0 : (rotAxis * 5));
+    }
+    else{
+      yAxis = (Math.abs(yAxis) < SwerveDriveConstants.deadband ? 0.0 : (yAxis * 2.5));
+      xAxis = (Math.abs(xAxis) < SwerveDriveConstants.deadband ? 0.0 : (xAxis * 2.5));
+      rotAxis = (Math.abs(rotAxis) < SwerveDriveConstants.deadband ? 0 : (rotAxis * 10));
+    }
     yAxis = yLim.calculate(yAxis);
     xAxis = xLim.calculate(xAxis);
 
-    translation = new Translation2d(yAxis, xAxis).times(SwerveDriveConstants.kMaxSpeedMPS);
-    rotation = rotAxis * SwerveDriveConstants.maxAngularspeed;
+    if(elevatorSub.getElevatorPosition() > Elevatorconstants.L2){
+      translation = new Translation2d(yAxis, xAxis).times(SwerveDriveConstants.kSlowSpeedMPS);
+      rotation = rotAxis * (SwerveDriveConstants.maxAngularspeed / 15);
+    }
+    else{
+      translation = new Translation2d(yAxis, xAxis).times(SwerveDriveConstants.kMaxSpeedMPS);
+      rotation = rotAxis * SwerveDriveConstants.maxAngularspeed;
+    }
 
     swerve.drive(translation, rotation, fieldRelative);
   }

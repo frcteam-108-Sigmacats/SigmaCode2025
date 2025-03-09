@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Swervemodule;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.HumanStationFeederAuto;
 import frc.robot.commands.AlgaeIntakeCmds.RestAlgaeIntake;
 import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeIntake;
 import frc.robot.commands.AlgaeIntakeCmds.RunAlgaeOuttake;
@@ -21,9 +22,10 @@ import frc.robot.commands.CXAWristCmds.TestCoralHopper;
 import frc.robot.commands.CXAWristCmds.TestWristPivot;
 import frc.robot.commands.CXAWristCmds.WristRestCommand;
 import frc.robot.commands.ControllerCmds.AlgaeRemovalCommand;
+import frc.robot.commands.ControllerCmds.DeepClimb;
 import frc.robot.commands.ControllerCmds.Drive;
 import frc.robot.commands.ControllerCmds.HumanStationFeeder;
-import frc.robot.commands.ControllerCmds.NetScore;
+import frc.robot.commands.ControllerCmds.PrimeClimb;
 import frc.robot.commands.ControllerCmds.ReefScore;
 import frc.robot.commands.ControllerCmds.SwervePoseGenerator;
 import frc.robot.commands.ElevatorCommands.ElevatorRestCommand;
@@ -33,9 +35,14 @@ import frc.robot.subsystems.Elevator;
 
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -62,17 +69,21 @@ public class RobotContainer {
 
   private Trigger bX, bB, bA, bY, LT, RT, LB, RB, upPov, downPov, rightPov, backLeftPaddle, backRightPaddle;
 
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     boolean fieldRelative = true;
-    swerveDrive.setDefaultCommand(new Drive(swerveDrive, m_driverController, fieldRelative));
+    swerveDrive.setDefaultCommand(new Drive(swerveDrive, elevatorSub, m_driverController, fieldRelative));
     algaeSub.setDefaultCommand(new RestAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeRestPivotPosition, AlgaeIntakeConstants.algaeRestSpeed));
     cXASub.setDefaultCommand(new WristRestCommand(cXASub, elevatorSub));
     elevatorSub.setDefaultCommand(new ElevatorRestCommand(elevatorSub, cXASub, vision));
+
     // cXASub.setDefaultCommand(getAutonomousCommand());
     // Configure the trigger bindings
     configureBindings();
+    makeAuto();
 
    // bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
    // bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
@@ -83,8 +94,8 @@ public class RobotContainer {
     // upPov.onTrue(new InstantCommand(()-> swerveDrive.zeroHeading(DriverStation.getAlliance().get() == Alliance.Red ? Rotation2d.kPi : Rotation2d.kZero)));
     // upPov.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));
     // downPov.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
-    bY.whileTrue(new ConditionalCommand(new NetScore(cXASub, elevatorSub, "L4",false), new ReefScore(elevatorSub, cXASub, false, "L4"), cXASub.doWeHaveAlgae()));
-    bY.whileFalse(new ConditionalCommand(new NetScore(cXASub, elevatorSub, "L4", true), new ReefScore(elevatorSub, cXASub, true, "L4"), cXASub.doWeHaveAlgae()));
+    bY.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L4"));
+    bY.whileFalse(new ReefScore(elevatorSub, cXASub, true, "L4"));
     bB.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L3"));
     bB.whileFalse(new ReefScore(elevatorSub, cXASub, true, "L3"));
     bA.whileTrue(new ReefScore(elevatorSub, cXASub, false, "L2"));
@@ -97,6 +108,9 @@ public class RobotContainer {
     RB.whileTrue(new SwervePoseGenerator(swerveDrive, vision, false));
     LT.toggleOnTrue(new HumanStationFeeder(cXASub, elevatorSub));
     RT.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));
+    downPov.toggleOnTrue(new PrimeClimb(algaeSub));
+    upPov.whileTrue(new DeepClimb(algaeSub, -0.3, -0.6));
+    upPov.whileFalse(new DeepClimb(algaeSub, 0, 0));
     /*bA.whileTrue(new TestWristPivot(cXASub, 0));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
     bY.whileTrue(new TestCoralHopper(cXASub, 0));*/
@@ -134,6 +148,28 @@ public class RobotContainer {
 
   }
 
+  public void makeAuto(){
+    NamedCommands.registerCommand("LeftAutoAlign", new SwervePoseGenerator(swerveDrive, vision, true));
+    NamedCommands.registerCommand("RightAutoAlign", new SwervePoseGenerator(swerveDrive, vision, false));
+    NamedCommands.registerCommand("HumanFeeder", new HumanStationFeederAuto(cXASub, elevatorSub));
+    NamedCommands.registerCommand("L4Position", new ReefScore(elevatorSub, cXASub, false, "L4"));
+    NamedCommands.registerCommand("L4Score", new ReefScore(elevatorSub, cXASub, true, "L4"));
+    NamedCommands.registerCommand("RestElevator", new ElevatorRestCommand(elevatorSub, cXASub, vision));
+    NamedCommands.registerCommand("RestWrist", new WristRestCommand(cXASub, elevatorSub));
+
+    Command blueCageSAuto = AutoBuilder.buildAuto("CageSAuto");
+    Command blueProcessorSAuto = AutoBuilder.buildAuto("ProcessorSAuto");
+
+    // autoChooser.setDefaultOption("Nothing", null);
+    // autoChooser.addOption("BlueCageSAuto", blueCageSAuto);
+    // autoChooser.addOption("BlueProcessorSAuto", blueProcessorSAuto);
+    autoChooser.setDefaultOption("Nothing", null);
+    autoChooser.addOption("CageAuto", blueCageSAuto);
+    autoChooser.addOption("ProcessorAuto", blueProcessorSAuto);
+
+    SmartDashboard.putData(autoChooser);
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -141,6 +177,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 }

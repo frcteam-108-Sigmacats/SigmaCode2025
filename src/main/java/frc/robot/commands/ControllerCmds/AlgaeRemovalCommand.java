@@ -18,6 +18,6 @@ public class AlgaeRemovalCommand extends ParallelRaceGroup {
   public AlgaeRemovalCommand(Elevator elevatorSub, CoralXAlgaeMech cxaMech, String level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetElevatorPositionReef(elevatorSub, level), new CXAWristAlgaeRemoval(cxaMech, elevatorSub, level));
+    addCommands(new SetElevatorPositionReef(elevatorSub, cxaMech, level), new CXAWristAlgaeRemoval(cxaMech, elevatorSub, level));
   }
 }

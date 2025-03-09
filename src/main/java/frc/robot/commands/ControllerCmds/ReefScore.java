@@ -18,6 +18,6 @@ public class ReefScore extends ParallelRaceGroup {
   public ReefScore(Elevator elevatorSub, CoralXAlgaeMech cxaMech, boolean readyToExecute, String level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetElevatorPositionReef(elevatorSub, level), new CXAReefScore(cxaMech, elevatorSub, readyToExecute, level));
+    addCommands(new SetElevatorPositionReef(elevatorSub, cxaMech, level), new CXAReefScore(cxaMech, elevatorSub, readyToExecute, level));
   }
 }

@@ -2,47 +2,39 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ElevatorCommands;
+package frc.robot.commands.ControllerCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.CoralXAlgaeWristConstants;
-import frc.robot.subsystems.CoralXAlgaeMech;
-import frc.robot.subsystems.Elevator;
+import frc.robot.Constants.AlgaeIntakeConstants;
+import frc.robot.subsystems.AlgaeIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SetElevatorPosition extends Command {
-  private Elevator elevator;
-
-  private CoralXAlgaeMech cxaMech;
-
-  private double position;
-
-
-  /** Creates a new SetElevatorPosition. */
-  public SetElevatorPosition(Elevator elevator, CoralXAlgaeMech cxaMech, double position) {
-    this.elevator = elevator;
-    this.position = position;
-
-    this.cxaMech = cxaMech;
-
+public class PrimeClimb extends Command {
+  private AlgaeIntake algaeIntake;
+  private int counter;
+  /** Creates a new PrimeClimb. */
+  public PrimeClimb(AlgaeIntake algaeIntake) {
+    this.algaeIntake = algaeIntake;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator);
+    addRequirements(algaeIntake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(position <= 0.5){
-      if(Math.abs(CoralXAlgaeWristConstants.restWristPosition - cxaMech.getWristPosition()) <= 5){
-        elevator.setElevatorPosition(position);
-      }
+    counter++;
+    algaeIntake.setAlgaePivot(AlgaeIntakeConstants.algaeClimbPrimePosition);
+    if(counter <= 25){
+      algaeIntake.setClimbMotorSpeed(-0.6);
     }
     else{
-      elevator.setElevatorPosition(position);
+      algaeIntake.setClimbMotorSpeed(0);
     }
   }
 

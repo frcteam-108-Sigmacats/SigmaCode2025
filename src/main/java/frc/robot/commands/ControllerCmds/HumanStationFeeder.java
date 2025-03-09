@@ -14,12 +14,10 @@ import frc.robot.subsystems.Elevator;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class HumanStationFeeder extends ParallelCommandGroup {
-  private CoralXAlgaeMech cxaMech;
-  private Elevator elevatorMech;
   /** Creates a new HumanStationFeeder. */
   public HumanStationFeeder(CoralXAlgaeMech cxaMech, Elevator elevatorMech) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetElevatorPosition(elevatorMech, 0), new CXAWristHumanStationFeeder(cxaMech));
+    addCommands(new SetElevatorPosition(elevatorMech, cxaMech, 0), new CXAWristHumanStationFeeder(cxaMech));
   }
 }

@@ -38,7 +38,7 @@ public class SwervePosePID extends Command {
   public void initialize() {
     target = swerveSub.getTargetPose();
     xpidController.setTolerance(0.1);
-    ypidController.setTolerance(0.4);
+    ypidController.setTolerance(0.2);
     xVal = 0;
     yVal = 0;
   }
@@ -47,16 +47,16 @@ public class SwervePosePID extends Command {
   @Override
   public void execute() {
       if(left){
-        xVal = -xpidController.calculate(visionSub.getRightLLTX(), -11);
-        yVal = ypidController.calculate(visionSub.getRightLLTY());
+        xVal = xpidController.calculate(visionSub.getRightLLTX(), -11);
+        yVal = -ypidController.calculate(visionSub.getRightLLTY());
       }
       else{
-        xVal = xpidController.calculate(visionSub.getLeftLLTX(), 5);
-        yVal = ypidController.calculate(visionSub.getLeftLLTY());
+        xVal = xpidController.calculate(visionSub.getLeftLLTX(), 0);
+        yVal = -ypidController.calculate(visionSub.getLeftLLTY());
       }
       System.out.println("X Value " + xVal);
       System.out.println("Y Value " + yVal);
-      translation = new Translation2d(xVal, yVal);
+      translation = new Translation2d(yVal, xVal).times(1.5);
       swerveSub.drive(translation, 0, false);
   }
 
@@ -67,7 +67,7 @@ public class SwervePosePID extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(xVal) <= 1 && Math.abs(yVal) <= 1){
+    if(Math.abs(xVal) <= 0.15 && Math.abs(yVal) <= 0.15){
       System.out.println("Finished PID");
       return true;
     }

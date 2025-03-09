@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -23,11 +24,14 @@ import frc.robot.Constants.AlgaeIntakeConstants;
 public class AlgaeIntake extends SubsystemBase {
   private SparkMax algaePivotMotor;
   private SparkMax algaeRollerMotor;
+  private SparkMax algaeClimbMotor;
 
   private SparkMaxConfig algaePivotMotorConfig = new SparkMaxConfig();
   private SparkMaxConfig alageRollerMotorConfig = new SparkMaxConfig();
+  private SparkMaxConfig algaeClimbMotorConfig = new SparkMaxConfig();
 
   private SparkClosedLoopController pivotPIDController;
+
 
   private AbsoluteEncoder pivotAbsEncoder;
 
@@ -36,9 +40,13 @@ public class AlgaeIntake extends SubsystemBase {
   public AlgaeIntake() {
     algaePivotMotor = new SparkMax(AlgaeIntakeConstants.algaePivotMotorID, MotorType.kBrushless);
     algaeRollerMotor = new SparkMax(AlgaeIntakeConstants.algaeRollerMotorID, MotorType.kBrushless);
+    algaeClimbMotor = new SparkMax(AlgaeIntakeConstants.algaeClimbMotorID, MotorType.kBrushless);
     
     algaePivotMotorConfig.idleMode(IdleMode.kBrake);
     algaePivotMotorConfig.smartCurrentLimit(AlgaeIntakeConstants.algaePivotMotorCurrentLimit);
+
+    algaeClimbMotorConfig.idleMode(IdleMode.kBrake);
+    algaeClimbMotorConfig.smartCurrentLimit(AlgaeIntakeConstants.algaeClimbMotorCurrentLimit);
 
     algaePivotMotorConfig.absoluteEncoder.positionConversionFactor(360);
     algaePivotMotorConfig.absoluteEncoder.inverted(true);
@@ -50,6 +58,8 @@ public class AlgaeIntake extends SubsystemBase {
     algaePivotMotorConfig.closedLoop.positionWrappingMinInput(0);
     algaePivotMotorConfig.closedLoop.positionWrappingMaxInput(360);
 
+    algaePivotMotorConfig.softLimit.reverseSoftLimit(0);
+
     pivotPIDController = algaePivotMotor.getClosedLoopController();
     pivotAbsEncoder = algaePivotMotor.getAbsoluteEncoder();
 
@@ -59,6 +69,7 @@ public class AlgaeIntake extends SubsystemBase {
 
     algaePivotMotor.configure(algaePivotMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     algaeRollerMotor.configure(alageRollerMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeClimbMotor.configure(algaeClimbMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     isThereAlgae = false;
   }
@@ -68,6 +79,10 @@ public class AlgaeIntake extends SubsystemBase {
 
   public void setAlgaePivot(double position){
     pivotPIDController.setReference(position, ControlType.kPosition);
+  }
+
+  public void setClimbMotorSpeed(double speed){
+    algaeClimbMotor.set(speed);
   }
 
   public double getAlgaePivotPosition(){

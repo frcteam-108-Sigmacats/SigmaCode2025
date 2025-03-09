@@ -52,7 +52,7 @@ public class CXAWristAlgaeRemoval extends Command {
       }
     }
 
-    if(cxaMech.doWeHaveAlgae().getAsBoolean()){
+    if(cxaMech.doWeHaveAlgae()){
       cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
     }
   }

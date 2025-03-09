@@ -125,7 +125,7 @@ public class SwerveDrive extends SubsystemBase {
                                   translation.getX(), 
                                   translation.getY(), 
                                   rotation, 
-                                  getYaw().minus(getAllianceColor() ? Rotation2d.kZero : Rotation2d.kPi)
+                                  getYaw().minus(getAllianceColor() ? Rotation2d.kPi : Rotation2d.kZero)
                               )
                               : new ChassisSpeeds(
                                   translation.getX(), 
@@ -194,7 +194,7 @@ public class SwerveDrive extends SubsystemBase {
       targetPose = tgPose;
     }
     public Pose2d getTargetPose(){
-      return targetPose.transformBy(new Transform2d(0.25, 0, Rotation2d.kZero));
+      return targetPose;
     }
 
     //Resetting the Pose Estimator
