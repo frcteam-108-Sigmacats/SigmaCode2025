@@ -42,10 +42,10 @@ public class CXAWristHumanStationFeederAuto extends Command {
       cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
     }
     else{
-      cxaMech.setCoralHopperMotorSpeed(0.2); 
-      cxaMech.setCXAVelocity(-850);
+      cxaMech.setCoralHopperMotorSpeed(0.4); 
+      cxaMech.setCXAVelocity(-1500);
     }
-    if(counter >= 25 && !cxaMech.getCoralDetection()){
+    if(counter >= 15 && !cxaMech.getCoralDetection()){
       isFinished = true;
     }
     if(cxaMech.getCoralDetection()){

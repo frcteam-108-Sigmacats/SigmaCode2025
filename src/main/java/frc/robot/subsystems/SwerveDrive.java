@@ -125,7 +125,7 @@ public class SwerveDrive extends SubsystemBase {
                                   translation.getX(), 
                                   translation.getY(), 
                                   rotation, 
-                                  getYaw().minus(getAllianceColor() ? Rotation2d.kPi : Rotation2d.kZero)
+                                  getYaw().minus(getAllianceColor() ? Rotation2d.kPi : Rotation2d.kPi)
                               )
                               : new ChassisSpeeds(
                                   translation.getX(), 
@@ -241,7 +241,7 @@ public class SwerveDrive extends SubsystemBase {
     swerveDrivePoseEstimator.update(getHeading(), getModulePosition());
     field.setRobotPose(getPose());
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Heading: ", getHeading().getDegrees());
+    SmartDashboard.putNumber("Yaw: ", getYaw().minus(getAllianceColor() ? Rotation2d.kPi: Rotation2d.kZero).getDegrees());
     SmartDashboard.putNumber("Robot Pose X: ", getPose().getX());
     SmartDashboard.putNumber("Robot Pose Y: ", getPose().getY());
     SmartDashboard.putNumber("Robot Pose Rotation: ", getPose().getRotation().getDegrees());

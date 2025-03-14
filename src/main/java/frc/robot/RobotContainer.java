@@ -33,6 +33,8 @@ import frc.robot.commands.ElevatorCommands.SetReefLevel;
 import frc.robot.subsystems.CoralXAlgaeMech;
 import frc.robot.subsystems.Elevator;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -67,7 +69,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private Trigger bX, bB, bA, bY, LT, RT, LB, RB, upPov, downPov, rightPov, backLeftPaddle, backRightPaddle;
+  private Trigger bX, bB, bA, bY, LT, RT, LB, RB, upPov, downPov, rightPov, backLeftPaddle, backRightPaddle, startButton;
 
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -111,6 +113,7 @@ public class RobotContainer {
     downPov.toggleOnTrue(new PrimeClimb(algaeSub));
     upPov.whileTrue(new DeepClimb(algaeSub, -0.3, -0.6));
     upPov.whileFalse(new DeepClimb(algaeSub, 0, 0));
+    startButton.onTrue(new InstantCommand(()-> swerveDrive.zeroHeading(swerveDrive.getAllianceColor() ? Rotation2d.kPi: Rotation2d.kZero)));
     /*bA.whileTrue(new TestWristPivot(cXASub, 0));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
     bY.whileTrue(new TestCoralHopper(cXASub, 0));*/
@@ -140,6 +143,7 @@ public class RobotContainer {
    upPov = m_driverController.povUp();
    downPov = m_driverController.povDown();
    rightPov = m_driverController.povRight();
+   startButton = m_driverController.start();
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     
@@ -157,15 +161,23 @@ public class RobotContainer {
     NamedCommands.registerCommand("RestElevator", new ElevatorRestCommand(elevatorSub, cXASub, vision));
     NamedCommands.registerCommand("RestWrist", new WristRestCommand(cXASub, elevatorSub));
 
-    Command blueCageSAuto = AutoBuilder.buildAuto("CageSAuto");
-    Command blueProcessorSAuto = AutoBuilder.buildAuto("ProcessorSAuto");
+    Command cageSAuto = AutoBuilder.buildAuto("CageSAuto");
+    Command processorSAuto = AutoBuilder.buildAuto("ProcessorSAuto");
+    Command cageSAuto3C = AutoBuilder.buildAuto("CageSAuto3C");
+    Command processorSAuto3C = AutoBuilder.buildAuto("ProcessorSAuto3C");
+    Command cageSAutoRRL = AutoBuilder.buildAuto("CageSAutoRRL");
+    Command processorSAutoLLR = AutoBuilder.buildAuto("ProcessorSAutoLLR");
 
     // autoChooser.setDefaultOption("Nothing", null);
     // autoChooser.addOption("BlueCageSAuto", blueCageSAuto);
     // autoChooser.addOption("BlueProcessorSAuto", blueProcessorSAuto);
     autoChooser.setDefaultOption("Nothing", null);
-    autoChooser.addOption("CageAuto", blueCageSAuto);
-    autoChooser.addOption("ProcessorAuto", blueProcessorSAuto);
+    autoChooser.addOption("CageAuto", cageSAuto);
+    autoChooser.addOption("ProcessorAuto", processorSAuto);
+    autoChooser.addOption("CageAuto3C", cageSAuto3C);
+    autoChooser.addOption("ProcessorAuto3C", processorSAuto3C);
+    autoChooser.addOption("CageAutoRRL", cageSAutoRRL);
+    autoChooser.addOption("ProcessorAutoLLR", processorSAutoLLR);
 
     SmartDashboard.putData(autoChooser);
   }

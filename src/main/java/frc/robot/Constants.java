@@ -149,11 +149,11 @@ public static final class CoralXAlgaeWristConstants{
 
   public static final double WristOuttakeVelocity = -2000;
 
-  public static final double cxaMotorFeedVelocity = -4000;
+  public static final double cxaMotorFeedVelocity = -5000;
   public static final double cxaMotorAlgaeRemovalVelocity = -3000;
   public static final double coralHopperSpeed = 1.0;
 
-  public static final double l4WristPosition = 30;
+  public static final double l4WristPosition = 35;//change back to 30 at comp
   public static final double algaeRemovalWristPosition = 25;//Get the actual position for it
   public static final double restWristPosition = 0;
 }

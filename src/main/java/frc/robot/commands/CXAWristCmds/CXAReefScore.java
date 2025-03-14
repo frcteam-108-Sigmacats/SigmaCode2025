@@ -58,7 +58,6 @@ public class CXAReefScore extends Command {
     }
     if(readyToExecute){
       if(!isThereAlgae){
-        if(Math.abs(CoralXAlgaeWristConstants.l4WristPosition - cxaMech.getWristPosition()) <= 5 && Math.abs(Elevatorconstants.L4 - elevatorSub.getElevatorPosition()) <= 0.2)
           cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
       }
       else{
