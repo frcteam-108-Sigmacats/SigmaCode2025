@@ -30,117 +30,29 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ProcessorSPath1"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4Position"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "LeftAutoAlign"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4Score"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "HumanFeeder"
-                }
               },
               {
-                "type": "path",
-                "data": {
-                  "pathName": "ProcessorSPath2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "HumanFeeder"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "HumanFeeder"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "ProcessorSPath3"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "race",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "L4Position"
+                        "waitTime": 0.5
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "RightAutoAlign"
+                        "name": "L4Position"
                       }
                     }
                   ]
@@ -174,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ProcessorSPath4"
+                  "pathName": "CageSPath2"
                 }
               }
             ]
@@ -212,7 +124,102 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ProcessorSPath5"
+                  "pathName": "CageSPath3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "RightAutoAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "L4Position"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Score"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HumanFeeder"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CageSPath4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HumanFeeder"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HumanFeeder"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CageSPath5"
                 }
               }
             ]

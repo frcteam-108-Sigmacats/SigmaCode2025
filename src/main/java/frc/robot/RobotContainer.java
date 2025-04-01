@@ -39,6 +39,7 @@ import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -87,6 +88,8 @@ public class RobotContainer {
     configureBindings();
     makeAuto();
 
+    PathfindingCommand.warmupCommand().schedule();
+
    // bX.whileTrue(new RunAlgaeIntake(algaeSub, AlgaeIntakeConstants.algaeIntakePivotPosition, AlgaeIntakeConstants.algaeIntakeSpeed));//42
    // bB.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
         // Configure the trigger bindings
@@ -113,6 +116,7 @@ public class RobotContainer {
     downPov.toggleOnTrue(new PrimeClimb(algaeSub));
     upPov.whileTrue(new DeepClimb(algaeSub, -0.3, -0.6));
     upPov.whileFalse(new DeepClimb(algaeSub, 0, 0));
+    rightPov.whileTrue(new RunAlgaeOuttake(algaeSub, AlgaeIntakeConstants.algaeOuttakePivotPosition, AlgaeIntakeConstants.algaeOuttakeSpeed));
     startButton.onTrue(new InstantCommand(()-> swerveDrive.zeroHeading(swerveDrive.getAllianceColor() ? Rotation2d.kPi: Rotation2d.kZero)));
     /*bA.whileTrue(new TestWristPivot(cXASub, 0));
     bB.whileTrue(new TestCXAMotor(cXASub, 0));
@@ -163,8 +167,8 @@ public class RobotContainer {
 
     Command cageSAuto = AutoBuilder.buildAuto("CageSAuto");
     Command processorSAuto = AutoBuilder.buildAuto("ProcessorSAuto");
-    Command cageSAuto3C = AutoBuilder.buildAuto("CageSAuto3C");
-    Command processorSAuto3C = AutoBuilder.buildAuto("ProcessorSAuto3C");
+    Command cageSAuto3C = AutoBuilder.buildAuto("CageSAuto3CTRY");
+    Command processorSAuto3C = AutoBuilder.buildAuto("ProcessorSAuto3CTRY");
     Command cageSAutoRRL = AutoBuilder.buildAuto("CageSAutoRRL");
     Command processorSAutoLLR = AutoBuilder.buildAuto("ProcessorSAutoLLR");
 

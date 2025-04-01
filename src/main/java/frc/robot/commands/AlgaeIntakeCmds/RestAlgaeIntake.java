@@ -36,7 +36,7 @@ public class RestAlgaeIntake extends Command {
     algaeSub.setAlgaePivot(position);
     if(isThereAlgae){
       algaeSub.setAlgaeRollerSpeed(AlgaeIntakeConstants.algaeRestSpeed);
-      if(algaeSub.getAlgaeRollerCurrent() < 6){
+      if(algaeSub.getAlgaeRollerCurrent() < 10){
         isThereAlgae = false;
       }
     }

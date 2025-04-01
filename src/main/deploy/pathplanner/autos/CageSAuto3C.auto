@@ -42,13 +42,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4Position"
+                  "name": "LeftAutoAlign"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "LeftAutoAlign"
+                  "name": "L4Position"
                 }
               }
             ]
@@ -152,7 +152,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.1
+            "waitTime": 0.25
           }
         },
         {

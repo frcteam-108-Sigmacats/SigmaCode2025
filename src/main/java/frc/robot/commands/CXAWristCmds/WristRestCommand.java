@@ -42,7 +42,7 @@ public class WristRestCommand extends Command {
     // }
     cxaMech.setWristPivot(0);
     if(cxaMech.doWeHaveAlgae()){
-      cxaMech.setCXAVelocity(-1000);
+      cxaMech.setCXAVelocity(-4000);
       if(Math.abs(cxaMech.getCXAMotorCurrent()) < 10){
         cxaMech.setAlgaeBool(false);
       }

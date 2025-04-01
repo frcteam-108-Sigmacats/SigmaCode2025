@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ProcessorSPath1"
+            "pathName": "BumpPath"
           }
         },
         {
@@ -42,13 +42,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4Position"
+                  "name": "LeftAutoAlign"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "LeftAutoAlign"
+                  "name": "L4Position"
                 }
               }
             ]
@@ -79,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ProcessorSPath2"
+                  "pathName": "CageSPath2"
                 }
               }
             ]
@@ -117,7 +117,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ProcessorSPath3"
+                  "pathName": "CageSPath3"
                 }
               }
             ]
@@ -134,13 +134,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "L4Position"
+                        "name": "RightAutoAlign"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "RightAutoAlign"
+                        "name": "L4Position"
                       }
                     }
                   ]
@@ -174,7 +174,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ProcessorSPath4"
+                  "pathName": "CageSPath4"
                 }
               }
             ]
@@ -212,7 +212,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ProcessorSPath5"
+                  "pathName": "CageSPath5"
                 }
               }
             ]
@@ -238,9 +238,22 @@
           }
         },
         {
-          "type": "wait",
+          "type": "race",
           "data": {
-            "waitTime": 0.1
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4Position"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
+                }
+              }
+            ]
           }
         },
         {

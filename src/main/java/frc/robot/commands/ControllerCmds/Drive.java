@@ -4,18 +4,25 @@
 
 package frc.robot.commands.ControllerCmds;
 
+import static edu.wpi.first.units.Units.Rotation;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Elevatorconstants;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveDrive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Drive extends Command {
   private final SwerveDrive swerve;
+
+  private PIDController rotController = new PIDController(0.2, 0, 0);
 
   private Elevator elevatorSub;
 
@@ -75,6 +82,16 @@ public class Drive extends Command {
       translation = new Translation2d(yAxis, xAxis).times(SwerveDriveConstants.kMaxSpeedMPS);
       rotation = rotAxis * SwerveDriveConstants.maxAngularspeed;
     }
+    // if(swerve.getHumanStationSnap()){
+    //   Pose2d targetPose = swerve.getPose().nearest(VisionConstants.humanStationPoses);
+    //   rotation = rotController.calculate(swerve.getHeading().getDegrees(),targetPose.getRotation().getDegrees());
+    //   if(translation.getX() != 0 && translation.getY() != 0){
+    //     rotation *= 2;
+    //   }
+    //   if(rotAxis != 0){
+    //     swerve.setHumanStationBoolean(false);
+    //   }
+    // }
 
     swerve.drive(translation, rotation, fieldRelative);
   }

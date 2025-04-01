@@ -40,7 +40,7 @@ import frc.robot.Constants.VisionConstants;
 
 public class SwerveDrive extends SubsystemBase {
   
-  
+  //Instantiating our 4 Swerve Modules on the Robot with its CAN IDs and Absolute Encoder Angle Offsets in Radians
   public final Swervemodule fLeftModule = new Swervemodule(SwerveDriveConstants.fLDriveMotorID,SwerveDriveConstants.fLTurnMotorID, SwerveDriveConstants.fLAbsEncoderOffset);
 
   public final Swervemodule fRightModule = new Swervemodule(SwerveDriveConstants.fRDriveMotorID,SwerveDriveConstants.fRTurnMotorID, SwerveDriveConstants.fRAbsEncoderOffset);
@@ -49,15 +49,26 @@ public class SwerveDrive extends SubsystemBase {
 
   public final Swervemodule bRightModule = new Swervemodule(SwerveDriveConstants.bRDriveMotorID,SwerveDriveConstants.bRTurnMotorID, SwerveDriveConstants.bRAbsEncoderOffset);
 
+  //Instantiating a variable to check if we are Blue Alliance or not
   private boolean isBlueAlliance;
 
+  //Instantiating our Gyro to track our Robot Angle and telling it which CANBus it is on
   private Pigeon2 gyro = new Pigeon2(1, "*");
 
+  //Making a Field Image to see where our robot think it is on the Field
   private Field2d field = new Field2d();
+
+  //Instantiating a Vision object to add our vision 
   private Vision vision = new Vision();
 
+  //Instantiating our Swerve Pose Estimator
   private static SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+  
+  //Adding our 4 modules into an array
   private Swervemodule [] modules = {fLeftModule, fRightModule, bLeftModule, bRightModule};
+
+ private boolean snapToHumanStation = false;
+
 
   // private SlewRateLimiter driveLimiter = new SlewRateLimiter(70);
   // private SlewRateLimiter turnLimiter= new SlewRateLimiter(70);
@@ -66,12 +77,16 @@ public class SwerveDrive extends SubsystemBase {
   private Pose2d targetPose = new Pose2d();
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
+    //Restoring our gyro to factory default
     gyro.getConfigurator().apply(new Pigeon2Configuration());
  
+    //Clearing any sticky faults our gyro has during boot up
     gyro.clearStickyFault_BootDuringEnable();
 
+    //Assigning our Pose Estimator with our Swerve Kinematic, gyro heading, module positions, and a empty pose
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveDriveConstants.swerveKinematics, getHeading(), getModulePosition(), new Pose2d());
 
+    //Checking to see which alliance we are on
     if(DriverStation.getAlliance().get() == Alliance.Blue){
       isBlueAlliance = true;
     }
@@ -79,45 +94,61 @@ public class SwerveDrive extends SubsystemBase {
       isBlueAlliance = false;
     }
 
+    //Configuring our Path Planner for Auto and Path Finder 
     try{
       RobotConfig config = RobotConfig.fromGUISettings();
 
       AutoBuilder.configure(
-      this::getPose, 
-      this::resetEstimator, 
-      this::getSpeeds, 
-      this::driveRobotRelative, 
-      new PPHolonomicDriveController(new PIDConstants(5.0,0.0,0.0), new PIDConstants(5.0,0.0,0.0)), 
-      config, 
-      () -> {
+      this::getPose, //Getting our Robot Pose
+      this::resetEstimator, //Reseting our Pose for Autonomous
+      this::getSpeeds, //Getting our Module Speeds
+      this::driveRobotRelative, //Basically how path planner will assign speed values to our module to run a path
+      new PPHolonomicDriveController(new PIDConstants(5.0,0.0,0.0), new PIDConstants(5.0,0.0,0.0)), //PID Constants to follow our path accurately 
+      config, //Our Robot Configurations on Path Planner
+      () -> {//Checking to see which alliuance we are on to flip our auto's path
         var alliance = DriverStation.getAlliance();
         if(alliance.isPresent()){
           return alliance.get() == DriverStation.Alliance.Red;
         }
         return false;
       },
-       this);
+       this);//Adding our subsystem dependency to run Auto 
     }
     catch(Exception e){
       DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
     }
 
+    //Adds our Field to Smart Dashboard
     SmartDashboard.putData(field);
   }
-    
+    public void setHumanStationBoolean(boolean humanStationSnap){
+      snapToHumanStation = humanStationSnap;
+    }
+    public boolean getHumanStationSnap(){
+      return snapToHumanStation;
+    }
+
+  //Get our Gyro Heading  between 0 and 360 degrees
     public Rotation2d getHeading(){
       return Rotation2d.fromDegrees(Math.IEEEremainder(gyro.getYaw().getValueAsDouble(), 360));
     }
 
+    //Gets our Robot Pose from our Pose Estimator
     public Pose2d getPose(){
       return swerveDrivePoseEstimator.getEstimatedPosition();
     }
+    
+    //Gets our Robot Pose from our Pose Estimator for Vision class to set up our Robot Orientation
     public static Pose2d getPoseForVision(){
       return swerveDrivePoseEstimator.getEstimatedPosition();
     }
+
+    //Resetting our Pose Estimators Heading
     public void zeroHeading(Rotation2d heading){
       swerveDrivePoseEstimator.resetPosition(getHeading(), getModulePosition(), new Pose2d(getPose().getTranslation(), heading));
     }
+
+    //Our Drive Function where we get our translation and rotation values and see if we want to drive field centric or robot centric
     public void drive(Translation2d translation, double rotation, boolean fieldRelative){
       SwerveModuleState[] swerveModuleStates =
           SwerveDriveConstants.swerveKinematics.toSwerveModuleStates(
@@ -132,13 +163,16 @@ public class SwerveDrive extends SubsystemBase {
                                   translation.getY(), 
                                   rotation)
                               );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMPS);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveDriveConstants.kMaxSpeedMPS);//Makes sure our robot never goes beyond the max speeds
+
+        //Setting our Module Desired States (basically direction the wheels should face with our desired speed)
         fLeftModule.setDesiredState(swerveModuleStates[0]);
         fRightModule.setDesiredState(swerveModuleStates[1]);
         bLeftModule.setDesiredState(swerveModuleStates[2]);
         bRightModule.setDesiredState(swerveModuleStates[3]);
     }
 
+    //Setting our Module States
     public void setModuleStates(SwerveModuleState[] desiredStates){
       SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveDriveConstants.kMaxSpeedMPS);
         fLeftModule.setDesiredState(desiredStates[0]);
@@ -147,6 +181,7 @@ public class SwerveDrive extends SubsystemBase {
         bRightModule.setDesiredState(desiredStates[3]);
     }
 
+    //Getting our Module States
      public SwerveModuleState[] getModuleStates(){
       SwerveModuleState[] states = new SwerveModuleState[4];
       for(int i = 0; i < states.length; i++){
@@ -155,6 +190,8 @@ public class SwerveDrive extends SubsystemBase {
       return states;
       
     }
+
+    //Seeing if we are Blue Alliance or not
     public boolean getAllianceColor(){
       return isBlueAlliance;
     }
@@ -190,9 +227,12 @@ public class SwerveDrive extends SubsystemBase {
       return positions;
     }
 
+    //Setting our Target Pose for our Path Generator Command
     public void setTargetPose(Pose2d tgPose){
       targetPose = tgPose;
     }
+
+    //Getting our Target Pose for our Path Generator Command
     public Pose2d getTargetPose(){
       return targetPose;
     }
@@ -216,19 +256,24 @@ public class SwerveDrive extends SubsystemBase {
     return (SwerveDriveConstants.gyroReversed) ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
   }
 
+  //Getting our Swerve Chassis Speeds used for AUTO
   public ChassisSpeeds getSpeeds(){
     SwerveModuleState[] states = getModuleStates();
     return SwerveDriveConstants.swerveKinematics.toChassisSpeeds(states);
   }
 
+  //Having our robot drive field relative used for AUTO
   public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds){
     driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
   }
+
+  //Having our robot drive robot centric used for AUTO
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds){
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
     SwerveModuleState[] targetStates = SwerveDriveConstants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
 
     setModuleStates(targetStates);
+    
   }
 
     
@@ -252,6 +297,8 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Front Right Drive Output: ", fRightModule.getMotorVoltage());
     SmartDashboard.putNumber("Back Left Drive Output: ", bLeftModule.getMotorVoltage());
     SmartDashboard.putNumber("Back Right Drive Output: ", bRightModule.getMotorVoltage());
+
+    //If either limelights see an apriltag and our robot is not spinning so fast we update our position from camera POV
     if(vision.istheretagLeftLL() && gyro.getAngularVelocityZDevice().getValueAsDouble() < 720){
       swerveDrivePoseEstimator.addVisionMeasurement(vision.getLeftLLBotPose().pose, vision.getLeftLLBotPose().timestampSeconds);
     }

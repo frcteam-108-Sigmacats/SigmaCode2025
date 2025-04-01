@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Rotation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -70,7 +71,7 @@ public final class Constants {
     public static double trackWidth = Units.inchesToMeters(22.4375);
     public static double wheelbase = Units.inchesToMeters(22.4375);
     public static double kMaxSpeedMPS = 21;
-    public static double kSlowSpeedMPS = 2;
+    public static double kSlowSpeedMPS = 2.0;
     public final static double maxAngularspeed = 4 * Math.PI;
     public static boolean gyroReversed = false;
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
@@ -91,16 +92,16 @@ public final class Constants {
     public static final double pivotD = 0.0;
 
     public static final int algaePivotMotorCurrentLimit = 20; //Units in amps
-    public static final int algaeRollerMotorCurrentLimit = 15; //Units in amps
+    public static final int algaeRollerMotorCurrentLimit = 35; //Units in amps
     public static final int algaeClimbMotorCurrentLimit = 40;//Units in amps
 
     public static final double algaeIntakePivotPosition = 95;
     public static final double algaeClimbPrimePosition = 135;
     public static final double algaeRestPivotPosition = 0.0;
-    public static final double algaeOuttakePivotPosition = 42;
+    public static final double algaeOuttakePivotPosition = 95;
 
     public static final double algaeIntakeSpeed = 0.80;
-    public static final double algaeRestSpeed = 0.0;
+    public static final double algaeRestSpeed = 0.7;
     public static final double algaeOuttakeSpeed = -0.3;
   }
   public static class Elevatorconstants{
@@ -117,8 +118,8 @@ public final class Constants {
     public static final double elevatorForwardSoftLimit = 5.3;/*change when robo done */
     public static final double elevatorReverseSoftLimit = 0;
     public static final double L1 = 0.0;
-    public static final double L2 = 1.1;
-    public static final double L3 = 2.5;
+    public static final double L2 = 1.02;
+    public static final double L3 = 2.4;//2.4 comp old was 2.5
     public static final double L4 = 5.1;
     public static final double A1 = 0.6;//Get actual position for it 
     public static final double A2 = 1.8;//Get actual position for it
@@ -140,6 +141,11 @@ public static final class CoralXAlgaeWristConstants{
   public static final double velocityI = 0.0;
   public static final double velocityD = 0.0;
 
+  public static final double fastVelocityP = 0.01;
+  public static final double fastVelocityI = 0.0;
+  public static final double fastVelocityD = 0.0;
+
+
   public static final int coralMotorCurrentLimit = 40;
   public static final int coralHopperMotorCurrentLimit = 45;
   public static final int coralAlgaeWristCurrentLimit = 20;
@@ -153,7 +159,7 @@ public static final class CoralXAlgaeWristConstants{
   public static final double cxaMotorAlgaeRemovalVelocity = -3000;
   public static final double coralHopperSpeed = 1.0;
 
-  public static final double l4WristPosition = 35;//change back to 30 at comp
+  public static final double l4WristPosition = 40;//comp 40 deg  old was 35
   public static final double algaeRemovalWristPosition = 25;//Get the actual position for it
   public static final double restWristPosition = 0;
 }
@@ -208,6 +214,13 @@ public static final class VisionConstants{
     9, new Pose2d(new Translation2d(12.451, 5.107), Rotation2d.fromDegrees(-60)),
     10, new Pose2d(new Translation2d(11.797, 4.015), Rotation2d.fromDegrees(0)),
     11, new Pose2d(new Translation2d(12.451, 2.923), Rotation2d.fromDegrees(60))
+  );
+
+  public static final List<Pose2d> humanStationPoses = (List<Pose2d>) 
+  List.of(new Pose2d(new Translation2d(1.297, 7.174), Rotation2d.fromDegrees(-53)),
+  new Pose2d(new Translation2d(1.151, 0.963), Rotation2d.fromDegrees(53)),
+  new Pose2d(new Translation2d(16.341,0.944), Rotation2d.fromDegrees(127)),
+  new Pose2d(new Translation2d(16.049,7.330), Rotation2d.fromDegrees(-127))
   );
 }
 

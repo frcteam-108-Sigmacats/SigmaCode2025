@@ -35,7 +35,7 @@ public class RunAlgaeIntake extends Command {
   public void execute() {
     algaeSub.setAlgaePivot(position);
     algaeSub.setAlgaeRollerSpeed(speed);
-      if(algaeSub.getAlgaeRollerCurrent() > 15){
+      if(algaeSub.getAlgaeRollerCurrent() > 30){
         algaeSub.setAlgaeBool(true);
         counter++;
       }

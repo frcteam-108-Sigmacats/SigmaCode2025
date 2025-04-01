@@ -61,7 +61,7 @@ public class CXAReefScore extends Command {
           cxaMech.setCXAVelocity(CoralXAlgaeWristConstants.cxaMotorFeedVelocity);
       }
       else{
-        cxaMech.setCXAVelocity(6000);
+        cxaMech.setCXAFastVelocity(6000);
       }
       counter++;
     }

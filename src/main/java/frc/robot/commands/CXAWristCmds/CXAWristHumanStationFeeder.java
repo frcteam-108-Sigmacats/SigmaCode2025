@@ -7,6 +7,7 @@ package frc.robot.commands.CXAWristCmds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.CoralXAlgaeWristConstants;
 import frc.robot.subsystems.CoralXAlgaeMech;
+import frc.robot.subsystems.SwerveDrive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CXAWristHumanStationFeeder extends Command {
@@ -25,7 +26,7 @@ public class CXAWristHumanStationFeeder extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isFinished = cxaMech.isThereCoral();
+    isFinished = false;
     isCoralThere = false;
     counter = 0;
     startCounter = false;

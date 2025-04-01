@@ -51,7 +51,7 @@ public class SwervePosePID extends Command {
         yVal = -ypidController.calculate(visionSub.getRightLLTY());
       }
       else{
-        xVal = xpidController.calculate(visionSub.getLeftLLTX(), 0);
+        xVal = xpidController.calculate(visionSub.getLeftLLTX(), 6);
         yVal = -ypidController.calculate(visionSub.getLeftLLTY());
       }
       System.out.println("X Value " + xVal);

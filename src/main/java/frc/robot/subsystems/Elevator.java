@@ -24,68 +24,93 @@ import frc.robot.Constants;
 import frc.robot.Constants.Elevatorconstants;
 
 public class Elevator extends SubsystemBase {
+  //Instantiating the elevator motors
  public SparkMax leftElevatorMotor;
  public SparkMax rightElevatorMotor;
  
+ //Instantiating the Elevator Motor Configurations
  private SparkMaxConfig leftElevatorMotorConfig = new SparkMaxConfig();
  private SparkMaxConfig rightElevatorMotorConfig = new SparkMaxConfig();
 
+ //Setting the reef score level to L1
  private int reefScoreLevel = 1;
 
+ //Instantiating the PID Controller to postion our elevator smoothly and quickly
  private SparkClosedLoopController elevatorPIDController;
  
+ //Instantiating a Relative Encoder to track our elevator position
  private RelativeEncoder elevatorencoder;
   /** Creates a new ExampleSubsystem. */
   public Elevator() {
 
+    //Assinging our Elevator Motors their CAN IDs and Motor Types
    leftElevatorMotor = new SparkMax(Elevatorconstants.leftElevatorMotorID, MotorType.kBrushless);
    rightElevatorMotor = new SparkMax(Elevatorconstants.rightElevatorMotorID, MotorType.kBrushless);
 
+   //Setting the Right Elevator Idle Mode and Current Limit
    rightElevatorMotorConfig.idleMode(IdleMode.kBrake);
    rightElevatorMotorConfig.smartCurrentLimit(Elevatorconstants.ElevatorMotorCurrentlimit);
 
+   //Setting the CPR of our Alternate Encoder for accurate readings
    rightElevatorMotorConfig.alternateEncoder.countsPerRevolution(8192);
-   rightElevatorMotorConfig.alternateEncoder.inverted(true);
+   rightElevatorMotorConfig.alternateEncoder.inverted(true);//Inverting our encoder to read the position of the elevator the right way
+
+   //Assinging the PID Values to the Right Elevator PID Controller
    rightElevatorMotorConfig.closedLoop.pid(Elevatorconstants.piviotP, Elevatorconstants.piviotI, Elevatorconstants.piviotD);
-   rightElevatorMotorConfig.closedLoop.velocityFF(1/5676);
-   rightElevatorMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
+   rightElevatorMotorConfig.closedLoop.velocityFF(1/5676);//Setting the Feedforward Voltage 
+   rightElevatorMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);//Telling our PID Controller to use the Through Bore Encoder connected to the motor as feedback
    
+   //Setting the Elevator Forward and Reverse Limits to make sure our Robot does not go beyond its limitations angle wise to not break the mechanism
    rightElevatorMotorConfig.softLimit.forwardSoftLimit(Elevatorconstants.elevatorForwardSoftLimit);
    rightElevatorMotorConfig.softLimit.reverseSoftLimit(Elevatorconstants.elevatorReverseSoftLimit);
 
+   //Setting the Left Elevator Idle Mode and Current Limit
    leftElevatorMotorConfig.idleMode(IdleMode.kBrake);
    leftElevatorMotorConfig.smartCurrentLimit(Elevatorconstants.ElevatorMotorCurrentlimit);
 
+   //Setting the Left Elevator Motor Forward and Reverse Limits
    leftElevatorMotorConfig.softLimit.forwardSoftLimit(Elevatorconstants.elevatorForwardSoftLimit);
    leftElevatorMotorConfig.softLimit.reverseSoftLimit(Elevatorconstants.elevatorReverseSoftLimit);
 
+   //Telling the Left Elevator Motor to follow the Right Elevator Motor
    leftElevatorMotorConfig.follow(rightElevatorMotor, true);
 
+   //Setting the PID Controller variable to the right elevator motor internal PID Controller
    elevatorPIDController = rightElevatorMotor.getClosedLoopController();
 
-
+   //Setting the Relative Encoder variable to the Right Elevator Motor External connection to the Through Bore Encoder
    elevatorencoder = rightElevatorMotor.getAlternateEncoder();
 
+   //Adding the configurations to the motor
    leftElevatorMotor.configure(leftElevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
    rightElevatorMotor.configure(rightElevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+   //Resetting the elevator encoder to zero on boot up
    elevatorencoder.setPosition(0);
    
   }
+
+//Setting the Elevator Position with PID Control
 public void setElevatorPosition(double position){
   elevatorPIDController.setReference(position, ControlType.kPosition);
-
- 
 }
-public void setElevatorSpeed(double Speed){
-rightElevatorMotor.set(Speed);}
 
+//Setting the Elevator Motors to a speed percentage
+public void setElevatorSpeed(double Speed){
+  rightElevatorMotor.set(Speed);
+}
+
+//Getting our Elevator Positiong
 public double getElevatorPosition(){
   return elevatorencoder.getPosition();
 }
+
+//Setting the Reef Level variable (NOT USING ANYMORE)
 public void setReefLevel(int level){
   reefScoreLevel = level;
 }
+
+//Getting which Level of the Reef we are on (NOT USING ANYMORE)
 public int getReefLevel(){
   return reefScoreLevel;
 }
