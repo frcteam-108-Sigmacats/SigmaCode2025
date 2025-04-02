@@ -5,20 +5,19 @@
 package frc.robot.commands.AlgaeIntakeCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.subsystems.Climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class RunAlgaeOuttake extends Command {
-  private AlgaeIntake algaeSub;
+public class TestClimbServoPosition extends Command {
+  private Climber climberMech;
   private double position;
-  private double speed;
-  /** Creates a new RunAlgaeOuttake. */
-  public RunAlgaeOuttake(AlgaeIntake algaeSub, double position, double speed) {
-    this.algaeSub = algaeSub;
+  /** Creates a new TestClimbServoPosition. */
+  public TestClimbServoPosition(Climber climberMech, double position) {
+    this.climberMech = climberMech;
+
     this.position = position;
-    this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(algaeSub);
+    addRequirements(climberMech);
   }
 
   // Called when the command is initially scheduled.
@@ -28,15 +27,12 @@ public class RunAlgaeOuttake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeSub.setAlgaePivot(position);
-    algaeSub.setAlgaeRollerSpeed(speed);
+    climberMech.setServoPosition(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    algaeSub.setAlgaeRollerSpeed(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

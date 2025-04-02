@@ -5,20 +5,21 @@
 package frc.robot.commands.AlgaeIntakeCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.Climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TestAlgaePivotPosition extends Command {
-private AlgaeIntake algaeSub;
+public class TestClimberWinchMotorPosition extends Command {
+private Climber climberMech;
 
 private double position;
   /** Creates a new TestAlgaePivotPosition. */
-  public TestAlgaePivotPosition(AlgaeIntake algaeSub, double position) {
-    this.algaeSub = algaeSub;
+  public TestClimberWinchMotorPosition(Climber climberMech, double position) {
+    this.climberMech = climberMech;
     this.position = position;
     // Use addRequirements() here to declare subsystem dependencies.
 
-    addRequirements(algaeSub);
+    addRequirements(climberMech);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +29,22 @@ private double position;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeSub.setAlgaePivot(position);
+    if(position != 0){
+      if(climberMech.getClimbPosition()<= (ClimberConstants.climberOutPosition - 3) || (climberMech.getClimbPosition() >= 350 &&  climberMech.getClimbPosition() <= 359)){
+        climberMech.setClimberPosition(position);
+      }
+      else{
+        climberMech.stopClimberWinchMotor();
+      }
+    }
+    else{
+      if(climberMech.getClimbPosition() >= ClimberConstants.climberStowPosition + 3 || (climberMech.getClimbPosition() >=350 && climberMech.getClimbPosition() <= 359.99)){
+        climberMech.setClimberPosition(position);
+      }
+      else{
+        climberMech.stopClimberWinchMotor();
+      }
+    }
 
   }
 

@@ -67,7 +67,9 @@ public class SwerveDrive extends SubsystemBase {
   //Adding our 4 modules into an array
   private Swervemodule [] modules = {fLeftModule, fRightModule, bLeftModule, bRightModule};
 
- private boolean snapToHumanStation = false;
+  private boolean snapToHumanStation = false;
+
+  private boolean slowSpeed = false;
 
 
   // private SlewRateLimiter driveLimiter = new SlewRateLimiter(70);
@@ -274,6 +276,13 @@ public class SwerveDrive extends SubsystemBase {
 
     setModuleStates(targetStates);
     
+  }
+
+  public void setSlowSpeedBool(boolean slowSpeed){
+    this.slowSpeed = slowSpeed;
+  }
+  public boolean getSlowSpeed(){
+    return slowSpeed;
   }
 
     

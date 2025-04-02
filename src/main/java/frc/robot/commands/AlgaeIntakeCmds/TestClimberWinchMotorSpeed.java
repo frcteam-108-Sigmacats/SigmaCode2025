@@ -4,50 +4,37 @@
 
 package frc.robot.commands.AlgaeIntakeCmds;
 
-import edu.wpi.first.wpilibj.ADXL345_I2C.AllAxes;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AlgaeIntakeConstants;
-import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.subsystems.Climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class RestAlgaeIntake extends Command {
-  private AlgaeIntake algaeSub;
-  private double position;
+public class TestClimberWinchMotorSpeed extends Command {
+   private Climber climberMech;
   private double speed;
-  private boolean isThereAlgae;
-  /** Creates a new RestAlgaeIntake. */
-  public RestAlgaeIntake(AlgaeIntake algaeSub, double position, double speed) {
-    this.algaeSub = algaeSub;
-    this.position = position;
+  /** Creates a new TestAlgaePivotSpeed. */
+  public TestClimberWinchMotorSpeed(Climber climberMech, double speed) {
+    this.climberMech = climberMech;
     this.speed = speed;
+    addRequirements(climberMech);
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(algaeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    isThereAlgae = algaeSub.doWeHaveAlgae();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeSub.setAlgaePivot(position);
-    if(isThereAlgae){
-      algaeSub.setAlgaeRollerSpeed(AlgaeIntakeConstants.algaeRestSpeed);
-      if(algaeSub.getAlgaeRollerCurrent() < 10){
-        isThereAlgae = false;
-      }
-    }
-    else{
-      algaeSub.setAlgaeRollerSpeed(0.0);
-    }
+    climberMech.setClimberWinchSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climberMech.setClimberWinchSpeed(0);
+  }
 
   // Returns true when the command should end.
   @Override

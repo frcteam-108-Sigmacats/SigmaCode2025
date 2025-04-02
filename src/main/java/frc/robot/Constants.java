@@ -82,27 +82,29 @@ public final class Constants {
     
       public static final double deadband = 0.2;
   }
-  public static class AlgaeIntakeConstants{
-    public static final int algaePivotMotorID = 9;
-    public static final int algaeRollerMotorID = 10;
+  public static class ClimberConstants{
+    public static final int climberWinchMotorID = 9;
+    public static final int climberIntakeMotorID = 10;
     public static final int algaeClimbMotorID = 16;
 
-    public static final double pivotP = 0.007;
+    public static final double pivotP = 1.4;
     public static final double pivotI = 0.0;
     public static final double pivotD = 0.0;
 
-    public static final int algaePivotMotorCurrentLimit = 20; //Units in amps
-    public static final int algaeRollerMotorCurrentLimit = 35; //Units in amps
+    public static final int climberWinchMotorCurrentLimit = 40; //Units in amps
+    public static final int climberIntakeMotorCurrentLimit = 35; //Units in amps
     public static final int algaeClimbMotorCurrentLimit = 40;//Units in amps
 
-    public static final double algaeIntakePivotPosition = 95;
-    public static final double algaeClimbPrimePosition = 135;
-    public static final double algaeRestPivotPosition = 0.0;
-    public static final double algaeOuttakePivotPosition = 95;
+    public static final double climberOutPosition = 62;
+    public static final double climberStowPosition = 0.0;
+    public static final double climberInPosition = 0.0;
 
-    public static final double algaeIntakeSpeed = 0.80;
-    public static final double algaeRestSpeed = 0.7;
-    public static final double algaeOuttakeSpeed = -0.3;
+    public static final double climerIntakeSpeed = 1.0;
+
+    public static final double climbInSpeed = -0.4;
+
+    public static final double ratchetDetachSpeed = -0.5;
+    public static final double ratchetEngageSpeed = 0.5;
   }
   public static class Elevatorconstants{
 

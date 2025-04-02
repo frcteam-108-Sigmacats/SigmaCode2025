@@ -5,39 +5,51 @@
 package frc.robot.commands.AlgaeIntakeCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.Climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TestAlgaeRoller extends Command {
-  private AlgaeIntake algaeSub;
-  private double speed;
-  /** Creates a new TestAlgaeRoller. */
-  public TestAlgaeRoller(AlgaeIntake algaeSub, double speed) {
-    this.algaeSub = algaeSub;
-    this.speed = speed;
+public class HOMClimber extends Command {
+  private Climber climberMech;
+  private int counter;
+  /** Creates a new HOMClimber. */
+  public HOMClimber(Climber climberMech) {
+    this.climberMech = climberMech;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(algaeSub);
+    addRequirements(climberMech);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+    climberMech.setServoPosition(0.5);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeSub.setAlgaeRollerSpeed(speed);
+    counter++;
+    if(counter >=15){
+      climberMech.setClimberPosition(ClimberConstants.climberStowPosition);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    algaeSub.setAlgaeRollerSpeed(0);
+    climberMech.stopClimberWinchMotor();
+    climberMech.setServoPosition(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(climberMech.getClimbPosition() <= ClimberConstants.climberStowPosition + 2 || (climberMech.getClimbPosition() >= 357 && climberMech.getClimbPosition() <= 359.9)){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }

@@ -92,7 +92,10 @@ public class Drive extends Command {
     //     swerve.setHumanStationBoolean(false);
     //   }
     // }
-
+    if(swerve.getSlowSpeed()){
+      translation = translation.times(0.4);
+      rotation *= 0.4;
+    }
     swerve.drive(translation, rotation, fieldRelative);
   }
 
