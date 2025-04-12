@@ -187,7 +187,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
 
   //Getting the CXA Motor Current to automatically tell the robot when the Algae is in the Wrist End Effector
   public double getCXAMotorCurrent(){
-    return cXAMotor.getTorqueCurrent().getValueAsDouble();
+    return cXAMotor.getTorqueCurrent(true).getValueAsDouble();
   }
 
   //Setting the boolean for if we have algae to true to hold the algae in our wrist
@@ -238,6 +238,7 @@ public class CoralXAlgaeMech extends SubsystemBase {
     SmartDashboard.putNumber("Wrist Angle", getWristPosition());
     SmartDashboard.putNumber("CXA Motor Current: ", getCXAMotorCurrent());
     SmartDashboard.putBoolean("Coral is In Place", isThereCoral());
+    // System.out.println("CXA Motor Current Limit" + cXAMotor.getTorqueCurrent(true).getValueAsDouble());
   }
 
   @Override

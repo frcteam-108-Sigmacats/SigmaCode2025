@@ -26,7 +26,12 @@ public class DeepClimb extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climberMech.setClimberWinchSpeed(ClimberConstants.climbInSpeed);
+    if(climberMech.getClimbPosition() >= 3){
+      climberMech.setClimberWinchSpeed(ClimberConstants.climbInSpeed);
+    }
+    else{
+      climberMech.setClimberWinchSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

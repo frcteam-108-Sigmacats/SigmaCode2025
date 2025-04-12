@@ -47,13 +47,16 @@ public class CXAWristAlgaeRemoval extends Command {
       }
     }
     if(counter >= 25){
-      if(Math.abs(cxaMech.getCXAMotorCurrent()) > 35){
+      if(Math.abs(cxaMech.getCXAMotorCurrent()) > 30){
         cxaMech.setAlgaeBool(true);
+      }
+      else{
+        cxaMech.setAlgaeBool(false);
       }
     }
 
     if(cxaMech.doWeHaveAlgae()){
-      cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
+      cxaMech.setWristPivot(CoralXAlgaeWristConstants.algaeRestPosition);
     }
   }
 

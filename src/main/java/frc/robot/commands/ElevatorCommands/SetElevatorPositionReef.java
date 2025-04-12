@@ -4,6 +4,8 @@
 
 package frc.robot.commands.ElevatorCommands;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Elevatorconstants;
 import frc.robot.subsystems.CoralXAlgaeMech;
@@ -14,10 +16,12 @@ public class SetElevatorPositionReef extends Command {
   private Elevator elevatorSub;
   private CoralXAlgaeMech cxaMech;
   private String level;
+  private String givenLevel;
   /** Creates a new SetElevatorPositionReef. */
   public SetElevatorPositionReef(Elevator elevatorSub, CoralXAlgaeMech cxaMech, String level) {
     this.elevatorSub = elevatorSub;
     this.level = level;
+    givenLevel = level;
     this.cxaMech = cxaMech;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSub);
@@ -26,8 +30,13 @@ public class SetElevatorPositionReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // System.out.println("Do we have Algae " + cxaMech.doWeHaveAlgae());
+
     if(cxaMech.doWeHaveAlgae()){
       level = "Net";
+    }
+    else{
+      level = givenLevel;
     }
   }
 
@@ -35,6 +44,9 @@ public class SetElevatorPositionReef extends Command {
   @Override
   public void execute() {
     switch(level){
+      // default:
+      //   System.out.println("Default");
+      //   break;
       case "L1":
       if(!cxaMech.getCoralDetection()){
         elevatorSub.setElevatorPosition(Elevatorconstants.L1);
@@ -54,6 +66,7 @@ public class SetElevatorPositionReef extends Command {
         if(!cxaMech.getCoralDetection()){
           elevatorSub.setElevatorPosition(Elevatorconstants.L4);
         }
+        // System.out.println("L4 Score");
         break;
       case "A1":
         elevatorSub.setElevatorPosition(Elevatorconstants.A1);
@@ -63,6 +76,7 @@ public class SetElevatorPositionReef extends Command {
         break;
       case "Net":
         elevatorSub.setElevatorPosition(5.4);
+        // System.out.println("Net Score");
         break;
     }
   }

@@ -142,7 +142,6 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("algae Pivot Position", getClimbPosition());  
-    System.out.println("Is Cage In " + isCageIn.get());
   }
 
   @Override

@@ -40,22 +40,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "L4Position"
-                      }
-                    }
-                  ]
+                  "name": "L4Position"
                 }
               }
             ]
@@ -135,22 +122,15 @@
           "data": {
             "commands": [
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "RightAutoAlign"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "L4Position"
-                      }
-                    }
-                  ]
+                  "name": "L4Position"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RightAutoAlign"
                 }
               }
             ]

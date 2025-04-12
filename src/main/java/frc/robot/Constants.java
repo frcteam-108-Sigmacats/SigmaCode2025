@@ -97,7 +97,7 @@ public final class Constants {
 
     public static final double climberOutPosition = 62;
     public static final double climberStowPosition = 0.0;
-    public static final double climberInPosition = 0.0;
+    public static final double climberInPosition = 5;
 
     public static final double climerIntakeSpeed = 1.0;
 
@@ -122,7 +122,7 @@ public final class Constants {
     public static final double L1 = 0.0;
     public static final double L2 = 1.02;
     public static final double L3 = 2.4;//2.4 comp old was 2.5
-    public static final double L4 = 5.1;
+    public static final double L4 = 5.1;//ORIGINAL 5.1
     public static final double A1 = 0.6;//Get actual position for it 
     public static final double A2 = 1.8;//Get actual position for it
     
@@ -161,9 +161,10 @@ public static final class CoralXAlgaeWristConstants{
   public static final double cxaMotorAlgaeRemovalVelocity = -3000;
   public static final double coralHopperSpeed = 1.0;
 
-  public static final double l4WristPosition = 40;//comp 40 deg  old was 35
+  public static final double l4WristPosition = 35;//ORIGINAL 40
   public static final double algaeRemovalWristPosition = 25;//Get the actual position for it
   public static final double restWristPosition = 0;
+  public static final double algaeRestPosition = 10;
 }
 
 public static final class VisionConstants{

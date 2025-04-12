@@ -42,7 +42,7 @@ public class ElevatorRestCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(CoralXAlgaeWristConstants.restWristPosition - cxaMech.getWristPosition()) <= 5 || cxaMech.getWristPosition() >= 355){
+    if(Math.abs(CoralXAlgaeWristConstants.restWristPosition - cxaMech.getWristPosition()) <= 11 || cxaMech.getWristPosition() >= 355){
       if(vision.istheretagLeftLL() || vision.istheretagRightLL()){
         if((vision.getLeftLLTA() > 0 && vision.getLeftLLTA() < 9.5) || (vision.getRightLLTA() > 0 && vision.getRightLLTA() < 9.5)){
           elevatorSub.setElevatorPosition(0);

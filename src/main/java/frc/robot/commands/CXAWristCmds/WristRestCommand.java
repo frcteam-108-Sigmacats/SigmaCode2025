@@ -40,15 +40,16 @@ public class WristRestCommand extends Command {
     // else{
     //   cxaMech.setWristPivot(0);
     // }
-    cxaMech.setWristPivot(0);
     if(cxaMech.doWeHaveAlgae()){
       cxaMech.setCXAVelocity(-4000);
+      cxaMech.setWristPivot(CoralXAlgaeWristConstants.algaeRestPosition);
       if(Math.abs(cxaMech.getCXAMotorCurrent()) < 10){
         cxaMech.setAlgaeBool(false);
       }
     }
     else{
       cxaMech.setCXAVelocity(0);
+      cxaMech.setWristPivot(CoralXAlgaeWristConstants.restWristPosition);
     }
     cxaMech.setCoralHopperMotorSpeed(0);
   }
